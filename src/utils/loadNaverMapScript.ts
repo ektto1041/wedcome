@@ -1,3 +1,5 @@
+import type { NaverMapsNamespace } from '../types/naver-maps'
+
 let naverMapScriptPromise: Promise<NaverMapsNamespace> | null = null
 
 export function loadNaverMapScript(clientId: string) {

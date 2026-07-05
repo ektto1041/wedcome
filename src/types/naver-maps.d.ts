@@ -1,9 +1,9 @@
-type NaverMapLatLng = {
+export type NaverMapLatLng = {
   lat: () => number
   lng: () => number
 }
 
-type NaverMapConstructor = new (
+export type NaverMapConstructor = new (
   element: HTMLElement,
   options: {
     center: NaverMapLatLng
@@ -15,13 +15,13 @@ type NaverMapConstructor = new (
   },
 ) => unknown
 
-type NaverMarkerConstructor = new (options: {
+export type NaverMarkerConstructor = new (options: {
   position: NaverMapLatLng
   map: unknown
   title?: string
 }) => unknown
 
-type NaverMapsNamespace = {
+export type NaverMapsNamespace = {
   LatLng: new (lat: number, lng: number) => NaverMapLatLng
   Map: NaverMapConstructor
   Marker: NaverMarkerConstructor
@@ -34,5 +34,3 @@ declare global {
     }
   }
 }
-
-export {}
