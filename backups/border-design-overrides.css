@@ -1,0 +1,104 @@
+/* Rollback reference for the pre Soft Paper Layer border-based design. */
+
+:root {
+  --shadow-card: 0 20px 40px rgba(109, 73, 53, 0.08);
+}
+
+.hero-section {
+  border-block: 1px solid var(--color-line);
+  box-shadow: var(--shadow-card);
+}
+
+.info-list {
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.info-list div {
+  padding-block: 0;
+}
+
+.naver-map {
+  border-radius: var(--radius-md);
+  box-shadow:
+    0 22px 48px rgba(109, 73, 53, 0.1),
+    0 0 0 1px rgba(126, 99, 81, 0.07);
+}
+
+.map-panel__link {
+  border: 1px solid rgba(185, 111, 82, 0.2);
+}
+
+.train-guide {
+  border-radius: var(--radius-md);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 253, 249, 0.76),
+      rgba(255, 248, 242, 0.52)
+    ),
+    var(--color-surface);
+  box-shadow:
+    0 20px 44px rgba(109, 73, 53, 0.07),
+    inset 0 0 0 1px rgba(126, 99, 81, 0.08);
+}
+
+.train-route {
+  border-block-start: 1px solid rgba(126, 99, 81, 0.12);
+}
+
+.train-route:last-child {
+  border-block-end: 1px solid rgba(126, 99, 81, 0.12);
+}
+
+.train-route__button {
+  border: 1px solid rgba(185, 111, 82, 0.18);
+}
+
+.train-guide__link {
+  border: 1px solid rgba(126, 99, 81, 0.16);
+}
+
+.train-drawer {
+  box-shadow: -24px 0 60px rgba(52, 38, 31, 0.16);
+}
+
+.train-drawer__close {
+  border: 1px solid rgba(126, 99, 81, 0.14);
+}
+
+.train-drawer__notice {
+  border: 1px solid rgba(185, 111, 82, 0.28);
+}
+
+.ticket-scroll-area {
+  border: 1px solid rgba(126, 99, 81, 0.1);
+}
+
+.ticket-card {
+  border: 1px solid rgba(126, 99, 81, 0.1);
+  box-shadow: none;
+}
+
+.train-drawer__footer {
+  border-block-start: 1px solid rgba(126, 99, 81, 0.12);
+}
+
+.gallery-card {
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background:
+    linear-gradient(180deg, rgba(255, 250, 245, 0.4), rgba(255, 255, 255, 0.95)),
+    var(--color-surface-strong);
+}
+
+.action-button {
+  border: 1px solid transparent;
+}
+
+.action-button:nth-child(2n) {
+  border-color: rgba(185, 111, 82, 0.16);
+  background: var(--color-accent-soft);
+  box-shadow: none;
+}

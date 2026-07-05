@@ -1,0 +1,188 @@
+diff --git a/src/styles/tokens.css b/src/styles/tokens.css
+--- a/src/styles/tokens.css
++++ b/src/styles/tokens.css
+@@
+-  --shadow-card:
+-    0 24px 70px rgba(109, 73, 53, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.72);
+-  --paper-surface:
+-    linear-gradient(
+-      135deg,
+-      rgba(255, 253, 249, 0.92),
+-      rgba(247, 235, 224, 0.62)
+-    ),
+-    radial-gradient(
+-      circle at 20% 10%,
+-      rgba(255, 255, 255, 0.72),
+-      transparent 32%
+-    );
++  --shadow-card: 0 20px 40px rgba(109, 73, 53, 0.08);
+diff --git a/src/styles/layout.css b/src/styles/layout.css
+--- a/src/styles/layout.css
++++ b/src/styles/layout.css
+@@
+ .hero-section {
+@@
+   display: flex;
+   align-items: flex-end;
+   overflow: hidden;
++  border-block: 1px solid var(--color-line);
+   background: var(--color-surface-strong);
+-  box-shadow: 0 24px 64px rgba(52, 38, 31, 0.12);
++  box-shadow: var(--shadow-card);
+   text-align: center;
+ }
+@@
+ .info-list {
+@@
+   margin: 0;
+   padding: var(--space-6);
+-  border-radius: 28px;
+-  background: var(--paper-surface);
++  border: 1px solid var(--color-line);
++  border-radius: var(--radius-md);
++  background: var(--color-surface);
+   box-shadow: var(--shadow-card);
+ }
+ 
+ .info-list div {
+   display: grid;
+   gap: 6px;
+-  padding-block: var(--space-2);
+ }
+@@
+ .naver-map {
+@@
+-  border-radius: 28px;
++  border-radius: var(--radius-md);
+@@
+   box-shadow:
+-    0 24px 70px rgba(109, 73, 53, 0.08),
+-    inset 0 1px 0 rgba(255, 255, 255, 0.72);
++    0 22px 48px rgba(109, 73, 53, 0.1),
++    0 0 0 1px rgba(126, 99, 81, 0.07);
+@@
+ .map-panel__link {
+@@
+   min-height: 44px;
+   padding: 0 var(--space-5);
+-  border: 0;
++  border: 1px solid rgba(185, 111, 82, 0.2);
+@@
+ .train-guide {
+@@
+   gap: var(--space-5);
+   padding: var(--space-6);
+-  border-radius: 28px;
+-  background: var(--paper-surface);
+-  box-shadow: var(--shadow-card);
++  border-radius: var(--radius-md);
++  background:
++    linear-gradient(
++      180deg,
++      rgba(255, 253, 249, 0.76),
++      rgba(255, 248, 242, 0.52)
++    ),
++    var(--color-surface);
++  box-shadow:
++    0 20px 44px rgba(109, 73, 53, 0.07),
++    inset 0 0 0 1px rgba(126, 99, 81, 0.08);
+ }
+@@
+ .train-route {
+   display: grid;
+   gap: var(--space-2);
+   padding-block: var(--space-4);
++  border-block-start: 1px solid rgba(126, 99, 81, 0.12);
+ }
++
++.train-route:last-child {
++  border-block-end: 1px solid rgba(126, 99, 81, 0.12);
++}
+@@
+ .train-route__button {
+@@
+   min-height: 40px;
+   padding: 0 var(--space-4);
+-  border: 0;
++  border: 1px solid rgba(185, 111, 82, 0.18);
+@@
+ .train-guide__link {
+@@
+   min-height: 46px;
+   padding: 0 var(--space-5);
+-  border: 0;
++  border: 1px solid rgba(126, 99, 81, 0.16);
+@@
+ .train-drawer {
+@@
+-  box-shadow: -24px 0 70px rgba(52, 38, 31, 0.14);
++  box-shadow: -24px 0 60px rgba(52, 38, 31, 0.16);
+@@
+ .train-drawer__close {
+@@
+   min-height: 38px;
+   padding: 0 var(--space-3);
+-  border: 0;
++  border: 1px solid rgba(126, 99, 81, 0.14);
+@@
+ .train-drawer__notice {
+@@
+   display: grid;
+   gap: var(--space-2);
+   padding: var(--space-4);
++  border: 1px solid rgba(185, 111, 82, 0.28);
+   border-radius: 16px;
+@@
+ .ticket-scroll-area {
+@@
+   position: relative;
+   overflow: hidden;
+   padding: var(--space-3);
++  border: 1px solid rgba(126, 99, 81, 0.1);
+   border-radius: 18px;
+@@
+ .ticket-card {
+   display: grid;
+   gap: var(--space-4);
+   padding: var(--space-4);
++  border: 1px solid rgba(126, 99, 81, 0.1);
+   border-radius: 16px;
+   background: rgba(255, 255, 255, 0.62);
+-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.64);
+ }
+@@
+ .train-drawer__footer {
+   display: grid;
+   gap: var(--space-3);
+   padding-block-start: var(--space-4);
++  border-block-start: 1px solid rgba(126, 99, 81, 0.12);
+ }
+@@
+ .gallery-card {
+@@
+   display: grid;
+   place-items: center;
+   padding: var(--space-4);
+-  border-radius: 28px;
+-  background: var(--paper-surface);
++  border: 1px solid var(--color-line);
++  border-radius: var(--radius-md);
++  background:
++    linear-gradient(180deg, rgba(255, 250, 245, 0.4), rgba(255, 255, 255, 0.95)),
++    var(--color-surface-strong);
+@@
+ .action-button {
+@@
+   align-items: center;
+   min-height: 52px;
+   padding: 0 var(--space-5);
+-  border: 0;
++  border: 1px solid transparent;
+@@
+ .action-button:nth-child(2n) {
+-  background: rgba(255, 253, 249, 0.72);
++  background: var(--color-accent-soft);
++  border-color: rgba(185, 111, 82, 0.16);
+   color: var(--color-accent);
+-  box-shadow: var(--shadow-card);
+ }
