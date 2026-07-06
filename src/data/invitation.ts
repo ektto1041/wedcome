@@ -1,3 +1,5 @@
+import heroImage from '../assets/images/hero-image.png'
+
 export const invitation = {
   couple: {
     groom: '박상연',
@@ -44,5 +46,36 @@ export const invitation = {
     { label: '신랑에게 연락', href: 'tel:010-1234-5678' },
     { label: '신부에게 연락', href: 'tel:010-9876-5432' },
   ],
-  gallery: ['햇살이 드는 로비 컷', '부케 디테일 컷', '함께 걷는 스냅 컷'],
+  gallery: [
+    {
+      id: 'sunlit-lobby',
+      src: heroImage,
+      alt: '햇살이 드는 공간에 함께 선 웨딩 이미지',
+    },
+    {
+      id: 'bouquet-detail',
+      src: heroImage,
+      alt: '부케와 웨딩 디테일 이미지',
+    },
+    {
+      id: 'walking-together',
+      src: heroImage,
+      alt: '함께 걷는 두 사람의 웨딩 이미지',
+    },
+    {
+      id: 'quiet-moment',
+      src: heroImage,
+      alt: '조용히 마주 선 두 사람의 웨딩 이미지',
+    },
+    {
+      id: 'wedding-place',
+      src: heroImage,
+      alt: '예식 공간의 따뜻한 분위기 이미지',
+    },
+    {
+      id: 'soft-light',
+      src: heroImage,
+      alt: '부드러운 빛이 담긴 웨딩 스냅 이미지',
+    },
+  ],
 } as const
