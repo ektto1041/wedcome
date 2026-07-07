@@ -67,6 +67,7 @@ export const invitation = {
     {
       id: 'wedding-gift',
       label: '마음 전하실 계좌',
+      bankName: '국민',
       accountNumber: '61030204026579',
     },
   ],

@@ -974,11 +974,13 @@
   gap: var(--space-2);
 }
 
+.gift-account-card__bank,
 .gift-account-card__label,
 .gift-account-card__number {
   margin: 0;
 }
 
+.gift-account-card__bank,
 .gift-account-card__label {
   color: var(--color-text-muted);
   font-size: 0.9375rem;

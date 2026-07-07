@@ -22,9 +22,13 @@ async function copyToClipboard(text: string) {
 export function MoneyGiftSection() {
   const [copiedAccountId, setCopiedAccountId] = useState<string | null>(null)
 
-  const handleCopy = async (accountId: string, accountNumber: string) => {
+  const handleCopy = async (
+    accountId: string,
+    bankName: string,
+    accountNumber: string,
+  ) => {
     try {
-      await copyToClipboard(accountNumber)
+      await copyToClipboard(`${bankName} ${accountNumber}`)
       setCopiedAccountId(accountId)
       window.setTimeout(() => {
         setCopiedAccountId((currentId) =>
@@ -51,12 +55,21 @@ export function MoneyGiftSection() {
             <article key={account.id} className="gift-account-card">
               <div className="gift-account-card__body">
                 <p className="gift-account-card__label">{account.label}</p>
-                <p className="gift-account-card__number">{account.accountNumber}</p>
+                <p className="gift-account-card__bank">{account.bankName}</p>
+                <p className="gift-account-card__number">
+                  {account.accountNumber}
+                </p>
               </div>
               <button
                 type="button"
                 className="action-button action-button--secondary"
-                onClick={() => handleCopy(account.id, account.accountNumber)}
+                onClick={() =>
+                  handleCopy(
+                    account.id,
+                    account.bankName,
+                    account.accountNumber,
+                  )
+                }
               >
                 {isCopied ? '복사되었어요' : '계좌번호 복사'}
               </button>

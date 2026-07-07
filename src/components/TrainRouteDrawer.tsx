@@ -35,6 +35,8 @@ export function TrainRouteDrawer({ route, onClose }: TrainRouteDrawerProps) {
       return
     }
 
+    const scrollY = window.scrollY
+
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         handleClose()
@@ -42,10 +44,21 @@ export function TrainRouteDrawer({ route, onClose }: TrainRouteDrawerProps) {
     }
 
     document.body.classList.add('is-drawer-open')
+    document.body.style.position = 'fixed'
+    document.body.style.top = `-${scrollY}px`
+    document.body.style.left = '0'
+    document.body.style.right = '0'
+    document.body.style.width = '100%'
     window.addEventListener('keydown', handleKeyDown)
 
     return () => {
       document.body.classList.remove('is-drawer-open')
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.left = ''
+      document.body.style.right = ''
+      document.body.style.width = ''
+      window.scrollTo(0, scrollY)
       window.removeEventListener('keydown', handleKeyDown)
     }
   }, [handleClose, isOpen])
