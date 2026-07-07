@@ -7,7 +7,7 @@ export function IntroSection() {
   return (
     <section className="content-narrow section">
       <SectionTitle eyebrow="Invitation" title="함께해 주세요" />
-      <div className="intro-message" aria-label="청첩장 인사말">
+      <div className="intro-message intro-message--glass">
         {paragraphs.map((paragraph) => (
           <p key={paragraph}>{paragraph}</p>
         ))}

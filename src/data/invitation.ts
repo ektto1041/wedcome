@@ -2,8 +2,8 @@ import heroImage from '../assets/images/hero-image.png'
 
 export const invitation = {
   couple: {
-    groom: '박상연',
-    bride: '김영진',
+    groom: '상연',
+    bride: '영진',
   },
   wedding: {
     dateLabel: '2026년 10월 3일 토요일 오후 4시 30분',
@@ -63,9 +63,12 @@ export const invitation = {
 부디 평안히 오시어
 두 사람의 앞날을 따뜻한 마음으로 축복하여 주시기를
 삼가 바라옵니다.`,
-  contacts: [
-    { label: '신랑에게 연락', href: 'tel:010-1234-5678' },
-    { label: '신부에게 연락', href: 'tel:010-9876-5432' },
+  bankAccounts: [
+    {
+      id: 'wedding-gift',
+      label: '마음 전하실 계좌',
+      accountNumber: '61030204026579',
+    },
   ],
   gallery: [
     {
