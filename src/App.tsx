@@ -1,4 +1,4 @@
-import { useChapterSwipeNavigation } from './hooks/useChapterSwipeNavigation'
+import { ChapterNavigation } from './components/ChapterNavigation'
 import { DesignSamplesSection } from './sections/DesignSamplesSection'
 import { GallerySection } from './sections/GallerySection'
 import { HeroSection } from './sections/HeroSection'
@@ -7,8 +7,6 @@ import { MoneyGiftSection } from './sections/MoneyGiftSection'
 import { WeddingInfoSection } from './sections/WeddingInfoSection'
 
 function App() {
-  useChapterSwipeNavigation()
-
   return (
     <main className="page">
       <div className="container invitation-shell">
@@ -19,6 +17,7 @@ function App() {
         <MoneyGiftSection />
         <DesignSamplesSection />
       </div>
+      <ChapterNavigation />
     </main>
   )
 }

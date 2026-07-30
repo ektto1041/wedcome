@@ -35,7 +35,6 @@ html {
   font-family: var(--font-body);
   line-height: 1.5;
   color: var(--color-text);
-  scroll-snap-type: y mandatory;
   background:
     radial-gradient(
       circle at 12% 14%,
@@ -58,11 +57,6 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-attachment: fixed;
-}
-
-html.chapter-swipe-navigation {
-  scroll-snap-type: none;
-  overscroll-behavior-y: none;
 }
 
 body {

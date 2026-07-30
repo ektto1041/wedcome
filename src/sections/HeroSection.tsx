@@ -3,7 +3,7 @@ import { invitation } from '../data/invitation'
 
 export function HeroSection() {
   return (
-    <section className="hero-section">
+    <section id="home" className="hero-section">
       <img
         className="hero-section__image"
         src={heroImage}

@@ -31,6 +31,7 @@ const samples = [
 export function DesignSamplesSection() {
   return (
     <section
+      id="design"
       className="section design-samples"
       aria-labelledby="design-samples-title"
     >

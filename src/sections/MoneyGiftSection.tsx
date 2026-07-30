@@ -41,7 +41,7 @@ export function MoneyGiftSection() {
   }
 
   return (
-    <section className="content-narrow section">
+    <section id="gift" className="content-narrow section">
       <SectionTitle
         eyebrow="Gift"
         title="마음 전하실 곳"

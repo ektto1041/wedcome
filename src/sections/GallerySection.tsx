@@ -4,7 +4,7 @@ import { invitation } from '../data/invitation'
 
 export function GallerySection() {
   return (
-    <section className="section">
+    <section id="gallery" className="section">
       <SectionTitle
         eyebrow="Gallery"
         title="우리의 장면"

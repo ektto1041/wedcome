@@ -13,7 +13,10 @@ export function WeddingInfoSection() {
     trainRoutes.find((route) => route.id === selectedRouteId) ?? null
 
   return (
-    <section className="content-narrow section wedding-info-section">
+    <section
+      id="wedding-info"
+      className="content-narrow section wedding-info-section"
+    >
       <SectionTitle eyebrow="Schedule" title="예식 안내" />
       <dl className="info-list">
         <div>
