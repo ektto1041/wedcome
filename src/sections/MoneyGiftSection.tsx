@@ -55,14 +55,16 @@ export function MoneyGiftSection() {
             <article key={account.id} className="gift-account-card">
               <div className="gift-account-card__body">
                 <p className="gift-account-card__label">{account.label}</p>
-                <p className="gift-account-card__bank">{account.bankName}</p>
-                <p className="gift-account-card__number">
-                  {account.accountNumber}
-                </p>
+                <div className="gift-account-card__details">
+                  <p className="gift-account-card__bank">{account.bankName}</p>
+                  <p className="gift-account-card__number">
+                    {account.accountNumber}
+                  </p>
+                </div>
               </div>
               <button
                 type="button"
-                className="action-button action-button--secondary"
+                className="gift-account-card__copy"
                 onClick={() =>
                   handleCopy(
                     account.id,
@@ -71,7 +73,7 @@ export function MoneyGiftSection() {
                   )
                 }
               >
-                {isCopied ? '복사되었어요' : '계좌번호 복사'}
+                {isCopied ? '완료' : '복사'}
               </button>
             </article>
           )

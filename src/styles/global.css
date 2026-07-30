@@ -35,23 +35,24 @@ html {
   font-family: var(--font-body);
   line-height: 1.5;
   color: var(--color-text);
+  scroll-snap-type: y mandatory;
   background:
     radial-gradient(
       circle at 12% 14%,
-      rgba(255, 220, 205, 0.72),
+      rgba(255, 226, 214, 0.42),
       transparent 26%
     ),
     radial-gradient(
       circle at 88% 18%,
-      rgba(220, 232, 255, 0.56),
+      rgba(229, 237, 255, 0.34),
       transparent 24%
     ),
     radial-gradient(
       circle at 50% 100%,
-      rgba(235, 221, 255, 0.24),
+      rgba(241, 232, 255, 0.18),
       transparent 30%
     ),
-    linear-gradient(180deg, #f8f3ef 0%, #f1ebe7 52%, #ece8e7 100%);
+    linear-gradient(180deg, #fffdfb 0%, #fbf8f5 52%, #f7f3f1 100%);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;

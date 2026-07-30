@@ -65,10 +65,16 @@ export const invitation = {
 삼가 바라옵니다.`,
   bankAccounts: [
     {
-      id: 'wedding-gift',
-      label: '마음 전하실 계좌',
+      id: 'groom',
+      label: '신랑측',
       bankName: '국민',
       accountNumber: '61030204026579',
+    },
+    {
+      id: 'bride',
+      label: '신부측',
+      bankName: '카카오',
+      accountNumber: '3333067428840',
     },
   ],
   gallery: [

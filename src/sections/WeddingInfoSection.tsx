@@ -13,7 +13,7 @@ export function WeddingInfoSection() {
     trainRoutes.find((route) => route.id === selectedRouteId) ?? null
 
   return (
-    <section className="content-narrow section">
+    <section className="content-narrow section wedding-info-section">
       <SectionTitle eyebrow="Schedule" title="예식 안내" />
       <dl className="info-list">
         <div>
@@ -35,40 +35,22 @@ export function WeddingInfoSection() {
         mapUrl={invitation.wedding.mapUrl}
       />
       <section className="train-guide" aria-labelledby="train-guide-title">
-        <div className="train-guide__header">
-          <p className="train-guide__eyebrow">Train</p>
-          <h3 id="train-guide-title">서울에서 기차로 오시는 길</h3>
-        </div>
+        <h3 id="train-guide-title">기차 시간표</h3>
+        <p className="train-guide__arrival">
+          안동역에서 예식장까지 차량으로 약 15~20분
+        </p>
         <div className="train-route-list">
-          {invitation.transportation.trainRoutes.map((route) => (
-            <article className="train-route" key={route.station}>
-              <p className="train-route__station">{route.station} 출발</p>
-              <p className="train-route__summary">{route.summary}</p>
-              <p className="train-route__note">{route.note}</p>
-              <button
-                className="train-route__button"
-                type="button"
-                onClick={() => setSelectedRouteId(route.id)}
-              >
-                시간표 보기
-              </button>
-            </article>
+          {trainRoutes.map((route) => (
+            <button
+              className="train-route__button"
+              type="button"
+              key={route.id}
+              onClick={() => setSelectedRouteId(route.id)}
+            >
+              {route.departureStation} 출발 시간표
+            </button>
           ))}
         </div>
-        <p className="train-guide__arrival">
-          {invitation.transportation.arrivalNote}
-        </p>
-        <a
-          className="train-guide__link"
-          href={invitation.transportation.trainBookingUrl}
-          target="_blank"
-          rel="noreferrer"
-        >
-          코레일에서 열차 조회하기
-        </a>
-        <p className="train-guide__helper">
-          {invitation.transportation.bookingNote}
-        </p>
       </section>
       <TrainRouteDrawer
         route={selectedRoute}
