@@ -25,11 +25,15 @@
 }
 
 .section {
+  height: 100dvh;
   min-height: 100dvh;
   display: grid;
-  align-content: center;
+  align-content: safe center;
   gap: var(--space-6);
   padding-block: var(--space-16);
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .section,

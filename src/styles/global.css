@@ -60,6 +60,11 @@ html {
   background-attachment: fixed;
 }
 
+html.chapter-swipe-navigation {
+  scroll-snap-type: none;
+  overscroll-behavior-y: none;
+}
+
 body {
   margin: 0;
   min-width: 320px;
