@@ -16,12 +16,13 @@ const chapters = [
 ] as const
 
 type ChapterId = (typeof chapters)[number]['id']
+const NAVIGATION_IDLE_DELAY = 1400
 
 export function ChapterNavigation() {
   const [activeChapterId, setActiveChapterId] = useState<ChapterId>(
     chapters[0].id,
   )
-  const [isExpanded, setIsExpanded] = useState(true)
+  const [isExpanded, setIsExpanded] = useState(false)
   const navigationRef = useRef<HTMLElement>(null)
   const idleTimerRef = useRef<number | null>(null)
   const activeChapterIndex = chapters.findIndex(
@@ -41,7 +42,7 @@ export function ChapterNavigation() {
       if (!navigationRef.current?.contains(document.activeElement)) {
         setIsExpanded(false)
       }
-    }, 2800)
+    }, NAVIGATION_IDLE_DELAY)
   }, [clearIdleTimer])
 
   const showNavigation = useCallback(() => {
