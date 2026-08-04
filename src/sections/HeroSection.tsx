@@ -14,6 +14,8 @@ import { invitation } from '../data/invitation'
 const TAP_MAX_DURATION_MS = 220
 const TAP_MOVE_TOLERANCE_PX = 12
 const HERO_VISIBILITY_THRESHOLD = 0.35
+const SCROLL_INDICATOR_FADE_START_PX = 24
+const SCROLL_INDICATOR_FADE_END_PX = 140
 
 type PressPoint = {
   x: number
@@ -60,8 +62,10 @@ function HeroProgress({
 
 export function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null)
-  const videoRef = useRef<HTMLVideoElement>(null)
+  const scrollIndicatorRef = useRef<HTMLDivElement>(null)
+  const videoRefs = useRef(new Map<string, HTMLVideoElement>())
   const animationFrameRef = useRef<number | null>(null)
+  const pendingStoryIdRef = useRef<string | null>(null)
   const pressStartedAtRef = useRef(0)
   const pressStartPointRef = useRef<PressPoint | null>(null)
   const didMoveRef = useRef(false)
@@ -69,7 +73,9 @@ export function HeroSection() {
   const [activeIndex, setActiveIndex] = useState(0)
   const [progress, setProgress] = useState(0)
   const [isHolding, setIsHolding] = useState(false)
-  const [isReady, setIsReady] = useState(false)
+  const [readyStoryIds, setReadyStoryIds] = useState<Set<string>>(
+    () => new Set(),
+  )
   const [isInView, setIsInView] = useState(true)
   const [isPageHidden, setIsPageHidden] = useState(document.hidden)
   const [isManuallyPaused, setIsManuallyPaused] = useState(false)
@@ -87,6 +93,10 @@ export function HeroSection() {
   )
   const activeStory =
     availableStories[activeIndex] ?? availableStories.at(0) ?? null
+  const nextStory =
+    availableStories.length > 1
+      ? availableStories[(activeIndex + 1) % availableStories.length]
+      : null
   const motionPlaybackAllowed = !prefersReducedMotion || hasUserStarted
   const shouldPlay =
     activeStory !== null &&
@@ -97,16 +107,45 @@ export function HeroSection() {
     isInView
   const isPlaybackPaused =
     !motionPlaybackAllowed || isManuallyPaused || !isInView || isPageHidden
+  const renderedStories = availableStories.filter(
+    (story) => story.id === activeStory?.id || story.id === nextStory?.id,
+  )
+
+  const completeStoryTransition = useCallback(
+    (nextIndex: number, nextStoryId: string) => {
+      if (!activeStory || nextStoryId === activeStory.id) {
+        return
+      }
+
+      const currentVideo = videoRefs.current.get(activeStory.id)
+      const nextVideo = videoRefs.current.get(nextStoryId)
+      if (!nextVideo) {
+        return
+      }
+
+      currentVideo?.pause()
+      nextVideo.currentTime = 0
+      pendingStoryIdRef.current = null
+      setReadyStoryIds((currentIds) => {
+        const nextIds = new Set(currentIds)
+        nextIds.add(nextStoryId)
+        return nextIds
+      })
+      setProgress(0)
+      setActiveIndex(nextIndex)
+    },
+    [activeStory],
+  )
 
   const goToNextStory = useCallback(() => {
     if (availableStories.length === 0) {
       return
     }
 
-    setProgress(0)
-
     if (availableStories.length === 1) {
-      const video = videoRef.current
+      const video = activeStory
+        ? videoRefs.current.get(activeStory.id)
+        : undefined
       if (video) {
         video.currentTime = 0
         if (shouldPlay) {
@@ -116,11 +155,33 @@ export function HeroSection() {
       return
     }
 
-    setIsReady(false)
-    setActiveIndex(
-      (currentIndex) => (currentIndex + 1) % availableStories.length,
-    )
-  }, [availableStories.length, shouldPlay])
+    if (pendingStoryIdRef.current !== null) {
+      return
+    }
+
+    const nextIndex = (activeIndex + 1) % availableStories.length
+    const targetStory = availableStories[nextIndex]
+    const targetVideo = targetStory
+      ? videoRefs.current.get(targetStory.id)
+      : undefined
+    if (!targetStory || !targetVideo) {
+      return
+    }
+
+    if (targetVideo.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+      completeStoryTransition(nextIndex, targetStory.id)
+      return
+    }
+
+    pendingStoryIdRef.current = targetStory.id
+    targetVideo.load()
+  }, [
+    activeIndex,
+    activeStory,
+    availableStories,
+    completeStoryTransition,
+    shouldPlay,
+  ])
 
   useEffect(() => {
     if (activeIndex >= availableStories.length && availableStories.length > 0) {
@@ -164,11 +225,47 @@ export function HeroSection() {
   }, [])
 
   useEffect(() => {
+    let frameId: number | null = null
+
+    const updateIndicatorOpacity = () => {
+      const indicator = scrollIndicatorRef.current
+      if (indicator) {
+        const fadeProgress = Math.min(
+          Math.max(
+            (window.scrollY - SCROLL_INDICATOR_FADE_START_PX) /
+              (SCROLL_INDICATOR_FADE_END_PX - SCROLL_INDICATOR_FADE_START_PX),
+            0,
+          ),
+          1,
+        )
+        indicator.style.opacity = String(1 - fadeProgress)
+      }
+      frameId = null
+    }
+
+    const handleScroll = () => {
+      if (frameId === null) {
+        frameId = window.requestAnimationFrame(updateIndicatorOpacity)
+      }
+    }
+
+    updateIndicatorOpacity()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId)
+      }
+    }
+  }, [])
+
+  useEffect(() => {
     if (!activeStory) {
       return
     }
 
-    const video = videoRef.current
+    const video = videoRefs.current.get(activeStory.id)
     if (!video) {
       return
     }
@@ -187,7 +284,7 @@ export function HeroSection() {
     }
 
     const updateProgress = () => {
-      const video = videoRef.current
+      const video = videoRefs.current.get(activeStory.id)
       if (video && Number.isFinite(video.duration) && video.duration > 0) {
         setProgress(video.currentTime / video.duration)
       }
@@ -204,27 +301,18 @@ export function HeroSection() {
   }, [activeStory, shouldPlay])
 
   useEffect(() => {
-    if (!isReady || availableStories.length < 2) {
-      return
-    }
-
-    const nextIndex = (activeIndex + 1) % availableStories.length
-    const nextStory = availableStories[nextIndex]
     if (!nextStory) {
       return
     }
 
-    const preloader = document.createElement('video')
-    preloader.preload = 'auto'
-    preloader.muted = true
-    preloader.src = nextStory.src
-    preloader.load()
-
-    return () => {
-      preloader.removeAttribute('src')
-      preloader.load()
+    const nextVideo = videoRefs.current.get(nextStory.id)
+    if (
+      nextVideo &&
+      nextVideo.readyState < HTMLMediaElement.HAVE_CURRENT_DATA
+    ) {
+      nextVideo.load()
     }
-  }, [activeIndex, availableStories, isReady])
+  }, [nextStory])
 
   const releaseHold = useCallback(() => {
     pressStartPointRef.current = null
@@ -247,7 +335,9 @@ export function HeroSection() {
     pressStartPointRef.current = { x: event.clientX, y: event.clientY }
     didMoveRef.current = false
     setIsHolding(true)
-    videoRef.current?.pause()
+    if (activeStory) {
+      videoRefs.current.get(activeStory.id)?.pause()
+    }
   }
 
   const handlePointerMove = (event: ReactPointerEvent<HTMLButtonElement>) => {
@@ -292,18 +382,55 @@ export function HeroSection() {
     setIsManuallyPaused((isPaused) => !isPaused)
   }
 
-  const handleVideoError = () => {
-    if (!activeStory) {
+  const handleVideoCanPlay = (storyId: string) => {
+    setReadyStoryIds((currentIds) => {
+      if (currentIds.has(storyId)) {
+        return currentIds
+      }
+
+      const nextIds = new Set(currentIds)
+      nextIds.add(storyId)
+      return nextIds
+    })
+
+    if (pendingStoryIdRef.current !== storyId) {
       return
     }
 
+    const nextIndex = availableStories.findIndex(
+      (story) => story.id === storyId,
+    )
+    if (nextIndex >= 0) {
+      completeStoryTransition(nextIndex, storyId)
+    }
+  }
+
+  const handleVideoError = (storyId: string) => {
+    const failedIndex = availableStories.findIndex(
+      (story) => story.id === storyId,
+    )
+    const wasActiveStory = activeStory?.id === storyId
+
+    if (pendingStoryIdRef.current === storyId) {
+      pendingStoryIdRef.current = null
+    }
     setFailedStoryIds((currentIds) => {
       const nextIds = new Set(currentIds)
-      nextIds.add(activeStory.id)
+      nextIds.add(storyId)
       return nextIds
     })
-    setProgress(0)
-    setIsReady(false)
+    setReadyStoryIds((currentIds) => {
+      const nextIds = new Set(currentIds)
+      nextIds.delete(storyId)
+      return nextIds
+    })
+
+    if (wasActiveStory) {
+      setProgress(0)
+      setActiveIndex(
+        failedIndex >= availableStories.length - 1 ? 0 : failedIndex,
+      )
+    }
   }
 
   return (
@@ -316,23 +443,43 @@ export function HeroSection() {
         alt={`${invitation.couple.groom}과 ${invitation.couple.bride}의 웨딩 이미지`}
       />
 
-      {activeStory && (
-        <video
-          aria-label={activeStory.label}
-          autoPlay={!prefersReducedMotion}
-          className={`hero-story__video${isReady ? ' is-ready' : ''}`}
-          key={activeStory.id}
-          muted
-          onCanPlay={() => setIsReady(true)}
-          onEnded={goToNextStory}
-          onError={handleVideoError}
-          playsInline
-          preload="auto"
-          ref={videoRef}
-        >
-          <source src={activeStory.src} />
-        </video>
-      )}
+      {renderedStories.map((story) => {
+        const isActive = story.id === activeStory?.id
+        const classNames = [
+          'hero-story__video',
+          isActive && readyStoryIds.has(story.id) ? 'is-active' : '',
+        ]
+          .filter(Boolean)
+          .join(' ')
+
+        return (
+          <video
+            aria-label={isActive ? story.label : undefined}
+            aria-hidden={!isActive}
+            className={classNames}
+            key={story.id}
+            muted
+            onCanPlay={() => handleVideoCanPlay(story.id)}
+            onEnded={() => {
+              if (isActive) {
+                goToNextStory()
+              }
+            }}
+            onError={() => handleVideoError(story.id)}
+            playsInline
+            preload="auto"
+            ref={(video) => {
+              if (video) {
+                videoRefs.current.set(story.id, video)
+              } else {
+                videoRefs.current.delete(story.id)
+              }
+            }}
+          >
+            <source src={story.src} />
+          </video>
+        )
+      })}
 
       {activeStory && (
         <>
@@ -388,6 +535,17 @@ export function HeroSection() {
         <h1 className="hero-section__title">
           {invitation.couple.bride}과 {invitation.couple.groom}
         </h1>
+      </div>
+
+      <div
+        className="hero-scroll-indicator"
+        aria-hidden="true"
+        ref={scrollIndicatorRef}
+      >
+        <span>아래로 스크롤</span>
+        <svg viewBox="0 0 24 14" aria-hidden="true">
+          <path d="m3 3 9 8 9-8" />
+        </svg>
       </div>
     </section>
   )
