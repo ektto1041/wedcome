@@ -12,6 +12,9 @@ export type NaverMapConstructor = new (
     pinchZoom?: boolean
     scrollWheel?: boolean
     keyboardShortcuts?: boolean
+    disableDoubleTapZoom?: boolean
+    disableDoubleClickZoom?: boolean
+    disableTwoFingerTapZoom?: boolean
   },
 ) => unknown
 

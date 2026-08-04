@@ -10,9 +10,7 @@ const chapters = [
   { id: 'home', label: '처음' },
   { id: 'invitation', label: '초대' },
   { id: 'wedding-info', label: '예식' },
-  { id: 'gallery', label: '사진' },
   { id: 'gift', label: '마음' },
-  { id: 'design', label: '시안' },
 ] as const
 
 type ChapterId = (typeof chapters)[number]['id']
@@ -25,6 +23,7 @@ export function ChapterNavigation() {
   const [isExpanded, setIsExpanded] = useState(false)
   const navigationRef = useRef<HTMLElement>(null)
   const idleTimerRef = useRef<number | null>(null)
+  const positionFrameRef = useRef<number | null>(null)
   const activeChapterIndex = chapters.findIndex(
     (chapter) => chapter.id === activeChapterId,
   )
@@ -55,25 +54,58 @@ export function ChapterNavigation() {
       .map((chapter) => document.getElementById(chapter.id))
       .filter((section): section is HTMLElement => section !== null)
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const currentSection = entries.find((entry) => entry.isIntersecting)
+    const updateActiveChapter = () => {
+      positionFrameRef.current = null
 
-        if (currentSection) {
-          setActiveChapterId(currentSection.target.id as ChapterId)
+      const activationLine = window.innerHeight * 0.42
+      let nextChapterId: ChapterId = chapters[0].id
+
+      for (const section of sections) {
+        if (section.getBoundingClientRect().top > activationLine) {
+          break
         }
-      },
-      {
-        rootMargin: '-45% 0px -45% 0px',
-        threshold: 0,
-      },
-    )
 
+        nextChapterId = section.id as ChapterId
+      }
+
+      const isAtPageEnd =
+        window.scrollY + window.innerHeight >=
+        document.documentElement.scrollHeight - 2
+
+      if (isAtPageEnd) {
+        nextChapterId = chapters[chapters.length - 1].id
+      }
+
+      setActiveChapterId((currentId) =>
+        currentId === nextChapterId ? currentId : nextChapterId,
+      )
+    }
+
+    const schedulePositionUpdate = () => {
+      if (positionFrameRef.current === null) {
+        positionFrameRef.current =
+          window.requestAnimationFrame(updateActiveChapter)
+      }
+    }
+
+    const resizeObserver = new ResizeObserver(schedulePositionUpdate)
     sections.forEach((section) => {
-      observer.observe(section)
+      resizeObserver.observe(section)
     })
+    window.addEventListener('scroll', schedulePositionUpdate, { passive: true })
+    window.addEventListener('resize', schedulePositionUpdate)
+    updateActiveChapter()
 
-    return () => observer.disconnect()
+    return () => {
+      resizeObserver.disconnect()
+      window.removeEventListener('scroll', schedulePositionUpdate)
+      window.removeEventListener('resize', schedulePositionUpdate)
+
+      if (positionFrameRef.current !== null) {
+        window.cancelAnimationFrame(positionFrameRef.current)
+        positionFrameRef.current = null
+      }
+    }
   }, [])
 
   useEffect(() => {

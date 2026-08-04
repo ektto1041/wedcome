@@ -1,3 +1,5 @@
+import { SectionTitle } from '../components/SectionTitle'
+
 const samples = [
   {
     id: 'paper',
@@ -35,15 +37,12 @@ export function DesignSamplesSection() {
       className="section design-samples"
       aria-labelledby="design-samples-title"
     >
-      <header className="section-title">
-        <p className="section-title__eyebrow">Design Direction</p>
-        <h2 id="design-samples-title" className="section-title__heading">
-          테두리 없는 디자인 시안
-        </h2>
-        <p className="section-title__description">
-          각 샘플은 같은 정보를 다른 표면감으로 보여주는 비교용입니다.
-        </p>
-      </header>
+      <SectionTitle
+        eyebrow="Design Direction"
+        title="테두리 없는 디자인 시안"
+        titleId="design-samples-title"
+        description="각 샘플은 같은 정보를 다른 표면감으로 보여주는 비교용입니다."
+      />
 
       <div className="design-sample-list">
         {samples.map((sample) => (

@@ -37,10 +37,13 @@ export function NaverMap({ venueName, coordinates, mapUrl }: NaverMapProps) {
         const map = new maps.Map(mapElementRef.current, {
           center: position,
           zoom: 14,
-          draggable: true,
-          pinchZoom: true,
+          draggable: false,
+          pinchZoom: false,
           scrollWheel: false,
-          keyboardShortcuts: true,
+          keyboardShortcuts: false,
+          disableDoubleTapZoom: true,
+          disableDoubleClickZoom: true,
+          disableTwoFingerTapZoom: true,
         })
 
         new maps.Marker({
@@ -66,28 +69,26 @@ export function NaverMap({ venueName, coordinates, mapUrl }: NaverMapProps) {
 
   return (
     <div className="map-panel">
-      <div
-        ref={mapElementRef}
-        className="naver-map"
-        role="img"
-        aria-label={`${venueName} 위치 지도`}
-      >
-        {status === 'loading' ? (
-          <p className="map-panel__status">지도를 불러오는 중입니다.</p>
-        ) : null}
-        {showFallback ? (
-          <p className="map-panel__status">
-            지도를 표시하지 못했습니다. 아래 링크로 위치를 확인해 주세요.
-          </p>
-        ) : null}
-      </div>
       <a
-        className="map-panel__link"
+        className="map-panel__map-link"
         href={mapUrl}
         target="_blank"
         rel="noreferrer"
+        aria-label={`${venueName} 네이버 지도에서 보기`}
       >
-        네이버지도에서 보기
+        <span className="visually-hidden">
+          {venueName} 네이버 지도에서 보기
+        </span>
+        <div ref={mapElementRef} className="naver-map" aria-hidden="true">
+          {status === 'loading' ? (
+            <p className="map-panel__status">지도를 불러오는 중입니다.</p>
+          ) : null}
+          {showFallback ? (
+            <p className="map-panel__status">
+              지도를 불러오지 못했습니다. 눌러서 위치를 확인해 주세요.
+            </p>
+          ) : null}
+        </div>
       </a>
     </div>
   )

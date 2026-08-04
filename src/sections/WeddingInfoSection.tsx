@@ -3,14 +3,10 @@ import { NaverMap } from '../components/NaverMap'
 import { SectionTitle } from '../components/SectionTitle'
 import { TrainRouteDrawer } from '../components/TrainRouteDrawer'
 import { invitation } from '../data/invitation'
-import { type TrainRouteId, trainRoutes } from '../data/trainRoutes'
+import { trainRoutes } from '../data/trainRoutes'
 
 export function WeddingInfoSection() {
-  const [selectedRouteId, setSelectedRouteId] = useState<TrainRouteId | null>(
-    null,
-  )
-  const selectedRoute =
-    trainRoutes.find((route) => route.id === selectedRouteId) ?? null
+  const [isTrainDrawerOpen, setIsTrainDrawerOpen] = useState(false)
 
   return (
     <section
@@ -31,33 +27,28 @@ export function WeddingInfoSection() {
           <dt>주소</dt>
           <dd>{invitation.wedding.address}</dd>
         </div>
+        <div className="info-list__action">
+          <dt>기차 시간표</dt>
+          <dd>
+            <button
+              type="button"
+              aria-haspopup="dialog"
+              onClick={() => setIsTrainDrawerOpen(true)}
+            >
+              보기
+            </button>
+          </dd>
+        </div>
       </dl>
       <NaverMap
         venueName={invitation.wedding.venueName}
         coordinates={invitation.wedding.coordinates}
         mapUrl={invitation.wedding.mapUrl}
       />
-      <section className="train-guide" aria-labelledby="train-guide-title">
-        <h3 id="train-guide-title">기차 시간표</h3>
-        <p className="train-guide__arrival">
-          안동역에서 예식장까지 차량으로 약 15~20분
-        </p>
-        <div className="train-route-list">
-          {trainRoutes.map((route) => (
-            <button
-              className="train-route__button"
-              type="button"
-              key={route.id}
-              onClick={() => setSelectedRouteId(route.id)}
-            >
-              {route.departureStation} 출발 시간표
-            </button>
-          ))}
-        </div>
-      </section>
       <TrainRouteDrawer
-        route={selectedRoute}
-        onClose={() => setSelectedRouteId(null)}
+        routes={trainRoutes}
+        isOpen={isTrainDrawerOpen}
+        onClose={() => setIsTrainDrawerOpen(false)}
       />
     </section>
   )

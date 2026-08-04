@@ -1,34 +1,54 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
-import type { TrainRoute } from '../data/trainRoutes'
+import {
+  type KeyboardEvent as ReactKeyboardEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
+import type { TrainRoute, TrainRouteId } from '../data/trainRoutes'
 
 type TrainRouteDrawerProps = {
-  route: TrainRoute | null
+  routes: TrainRoute[]
+  isOpen: boolean
   onClose: () => void
 }
 
-export function TrainRouteDrawer({ route, onClose }: TrainRouteDrawerProps) {
-  const isOpen = Boolean(route)
+export function TrainRouteDrawer({
+  routes,
+  isOpen,
+  onClose,
+}: TrainRouteDrawerProps) {
   const closeTimerRef = useRef<number | null>(null)
+  const isClosingRef = useRef(false)
   const [isClosing, setIsClosing] = useState(false)
+  const [activeRouteId, setActiveRouteId] = useState<TrainRouteId>(
+    routes[0]?.id ?? 'seoul',
+  )
+  const activeRoute =
+    routes.find((route) => route.id === activeRouteId) ?? routes[0]
 
   const handleClose = useCallback(() => {
-    if (isClosing) {
+    if (isClosingRef.current) {
       return
     }
 
+    isClosingRef.current = true
     setIsClosing(true)
     closeTimerRef.current = window.setTimeout(() => {
       onClose()
       setIsClosing(false)
+      isClosingRef.current = false
       closeTimerRef.current = null
     }, 260)
-  }, [isClosing, onClose])
+  }, [onClose])
 
   useEffect(() => {
-    if (route) {
+    if (isOpen) {
+      setActiveRouteId(routes[0]?.id ?? 'seoul')
       setIsClosing(false)
+      isClosingRef.current = false
     }
-  }, [route])
+  }, [isOpen, routes])
 
   useEffect(() => {
     if (!isOpen) {
@@ -71,7 +91,38 @@ export function TrainRouteDrawer({ route, onClose }: TrainRouteDrawerProps) {
     }
   }, [])
 
-  if (!route) {
+  const handleTabKeyDown = (
+    event: ReactKeyboardEvent<HTMLButtonElement>,
+    routeId: TrainRouteId,
+  ) => {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) {
+      return
+    }
+
+    event.preventDefault()
+
+    const currentIndex = routes.findIndex((route) => route.id === routeId)
+    let nextIndex = currentIndex
+
+    if (event.key === 'Home') {
+      nextIndex = 0
+    } else if (event.key === 'End') {
+      nextIndex = routes.length - 1
+    } else if (event.key === 'ArrowLeft') {
+      nextIndex = (currentIndex - 1 + routes.length) % routes.length
+    } else if (event.key === 'ArrowRight') {
+      nextIndex = (currentIndex + 1) % routes.length
+    }
+
+    const nextRoute = routes[nextIndex]
+
+    if (nextRoute) {
+      setActiveRouteId(nextRoute.id)
+      document.getElementById(`train-route-tab-${nextRoute.id}`)?.focus()
+    }
+  }
+
+  if (!isOpen || !activeRoute) {
     return null
   }
 
@@ -95,9 +146,7 @@ export function TrainRouteDrawer({ route, onClose }: TrainRouteDrawerProps) {
         <div className="train-drawer__header">
           <div>
             <p className="train-drawer__eyebrow">Train Schedule</p>
-            <h3 id="train-drawer-title">
-              {route.departureStation}에서 {route.arrivalStation}
-            </h3>
+            <h3 id="train-drawer-title">안동행 기차 시간표</h3>
           </div>
           <button
             className="train-drawer__close"
@@ -117,12 +166,40 @@ export function TrainRouteDrawer({ route, onClose }: TrainRouteDrawerProps) {
           </p>
         </div>
 
-        <div className="ticket-scroll-area">
+        <div className="train-route-tabs" role="tablist" aria-label="출발역">
+          {routes.map((route) => {
+            const isActive = route.id === activeRoute.id
+
+            return (
+              <button
+                id={`train-route-tab-${route.id}`}
+                type="button"
+                role="tab"
+                aria-selected={isActive}
+                aria-controls={`train-route-panel-${route.id}`}
+                tabIndex={isActive ? 0 : -1}
+                key={route.id}
+                onClick={() => setActiveRouteId(route.id)}
+                onKeyDown={(event) => handleTabKeyDown(event, route.id)}
+              >
+                {route.departureStation}
+              </button>
+            )
+          })}
+        </div>
+
+        <div
+          id={`train-route-panel-${activeRoute.id}`}
+          className="ticket-scroll-area"
+          role="tabpanel"
+          aria-labelledby={`train-route-tab-${activeRoute.id}`}
+          key={activeRoute.id}
+        >
           <div className="ticket-list">
-            {route.tickets.map((ticket) => (
+            {activeRoute.tickets.map((ticket) => (
               <article
                 className="ticket-card"
-                key={`${route.id}-${ticket.trainNumber}-${ticket.departureTime}`}
+                key={`${activeRoute.id}-${ticket.trainNumber}-${ticket.departureTime}`}
               >
                 <div className="ticket-card__top">
                   <p className="ticket-card__train">
@@ -149,18 +226,19 @@ export function TrainRouteDrawer({ route, onClose }: TrainRouteDrawerProps) {
         <div className="train-drawer__footer">
           <a
             className="train-drawer__booking"
-            href={route.bookingUrl}
+            href={activeRoute.bookingUrl}
             target="_blank"
             rel="noreferrer"
           >
             코레일에서 예매하기
           </a>
           <p>
-            출발역은 {route.departureStation}, 도착역은 {route.arrivalStation}
-            으로 입력해 주세요.
+            출발역은 {activeRoute.departureStation}, 도착역은{' '}
+            {activeRoute.arrivalStation}으로 입력해 주세요.
           </p>
           <small>
-            출처: {route.sourceLabel}, 최종수정 {route.sourceUpdatedAt}
+            출처: {activeRoute.sourceLabel}, 최종수정{' '}
+            {activeRoute.sourceUpdatedAt}
           </small>
         </div>
       </aside>

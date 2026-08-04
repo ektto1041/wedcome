@@ -1,6 +1,4 @@
 import { ChapterNavigation } from './components/ChapterNavigation'
-import { DesignSamplesSection } from './sections/DesignSamplesSection'
-import { GallerySection } from './sections/GallerySection'
 import { HeroSection } from './sections/HeroSection'
 import { IntroSection } from './sections/IntroSection'
 import { MoneyGiftSection } from './sections/MoneyGiftSection'
@@ -13,9 +11,7 @@ function App() {
         <HeroSection />
         <IntroSection />
         <WeddingInfoSection />
-        <GallerySection />
         <MoneyGiftSection />
-        <DesignSamplesSection />
       </div>
       <ChapterNavigation />
     </main>
