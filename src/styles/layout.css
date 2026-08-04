@@ -224,7 +224,9 @@
 .hero-section::after {
   position: absolute;
   inset: 0;
+  z-index: 1;
   content: "";
+  pointer-events: none;
   background:
     linear-gradient(180deg, rgba(20, 17, 15, 0.18) 0%, transparent 28%),
     linear-gradient(
@@ -244,9 +246,118 @@
   object-position: center center;
 }
 
+.hero-story__fallback {
+  z-index: 0;
+}
+
+.hero-story__video {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  opacity: 0;
+  transition: opacity 240ms ease;
+}
+
+.hero-story__video.is-ready {
+  opacity: 1;
+}
+
+.hero-story__progress {
+  position: absolute;
+  inset-block-start: calc(env(safe-area-inset-top) + 12px);
+  inset-inline: 12px;
+  z-index: 4;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 4px;
+  pointer-events: none;
+}
+
+.hero-story__progress-track {
+  height: 3px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.36);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+}
+
+.hero-story__progress-fill {
+  display: block;
+  width: var(--hero-story-progress);
+  height: 100%;
+  border-radius: inherit;
+  background: rgba(255, 255, 255, 0.96);
+  will-change: width;
+}
+
+.hero-story__interaction {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.hero-story__interaction:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.96);
+  outline-offset: -6px;
+}
+
+.hero-story__playback {
+  position: absolute;
+  inset-block-start: calc(env(safe-area-inset-top) + 26px);
+  inset-inline-end: 10px;
+  z-index: 5;
+  display: grid;
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.96);
+  background: rgba(18, 15, 14, 0.24);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.14);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+}
+
+.hero-story__playback svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+}
+
+.hero-story__playback:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.hero-story__status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .hero-section__content {
   position: relative;
-  z-index: 1;
+  z-index: 3;
   width: 100%;
   max-width: 620px;
   display: flex;
@@ -256,6 +367,7 @@
   margin: 0 auto;
   padding: 0 22px 15dvh;
   color: #fffdf9;
+  pointer-events: none;
 }
 
 .hero-section__title {
@@ -269,6 +381,12 @@
   text-shadow:
     0 10px 30px rgba(0, 0, 0, 0.18),
     0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-story__video {
+    transition: none;
+  }
 }
 
 .info-list {
