@@ -45,7 +45,9 @@
 }
 
 #gift {
-  padding-block-end: calc(var(--space-16) + 72px + env(safe-area-inset-bottom));
+  padding-block-end: calc(
+    var(--space-16) + var(--space-8) + 72px + env(safe-area-inset-bottom)
+  );
 }
 
 .section-title {
@@ -843,19 +845,25 @@
 
 .train-drawer {
   position: absolute;
-  inset-block: 0;
-  inset-inline-end: 0;
-  width: min(100vw, 430px);
-  max-height: 100dvh;
+  inset-block-end: 0;
+  inset-inline: 0;
+  width: 100%;
+  max-width: 720px;
+  height: 90dvh;
+  max-height: 90dvh;
+  margin-inline: auto;
   display: grid;
   grid-template-rows: auto auto auto 1fr auto;
   gap: var(--space-5);
-  padding: var(--space-6);
-  border-inline-start: 1px solid rgba(255, 255, 255, 0.28);
+  padding: var(--space-6) var(--space-6)
+    max(var(--space-6), env(safe-area-inset-bottom));
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-block-end: 0;
+  border-radius: 28px 28px 0 0;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 244, 238, 0.5)),
     rgba(244, 240, 235, 0.78);
-  box-shadow: -24px 0 70px rgba(52, 38, 31, 0.14);
+  box-shadow: 0 -24px 70px rgba(52, 38, 31, 0.14);
   overflow: hidden;
   backdrop-filter: blur(24px) saturate(1.16);
   -webkit-backdrop-filter: blur(24px) saturate(1.16);
@@ -889,24 +897,24 @@
 @keyframes drawer-slide-in {
   from {
     opacity: 0.72;
-    transform: translateX(100%);
+    transform: translateY(100%);
   }
 
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateY(0);
   }
 }
 
 @keyframes drawer-slide-out {
   from {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateY(0);
   }
 
   to {
     opacity: 0.72;
-    transform: translateX(100%);
+    transform: translateY(100%);
   }
 }
 
@@ -966,12 +974,6 @@
 .train-drawer__notice {
   display: grid;
   gap: var(--space-2);
-  padding: var(--space-4);
-  border-radius: 16px;
-  background:
-    linear-gradient(135deg, rgba(185, 111, 82, 0.16), rgba(255, 253, 249, 0.9)),
-    var(--color-surface);
-  box-shadow: 0 14px 30px rgba(109, 73, 53, 0.08);
 }
 
 .train-drawer__notice strong {
@@ -1014,38 +1016,7 @@
 
 .ticket-scroll-area {
   min-height: 0;
-  position: relative;
   overflow: hidden;
-  padding: var(--space-3);
-  border-radius: 18px;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.48),
-      rgba(255, 244, 238, 0.72)
-    ),
-    rgba(255, 255, 255, 0.34);
-  box-shadow: inset 0 0 24px rgba(109, 73, 53, 0.05);
-}
-
-.ticket-scroll-area::before,
-.ticket-scroll-area::after {
-  position: absolute;
-  inset-inline: var(--space-3);
-  z-index: 1;
-  height: 24px;
-  content: "";
-  pointer-events: none;
-}
-
-.ticket-scroll-area::before {
-  inset-block-start: var(--space-3);
-  background: linear-gradient(180deg, rgba(255, 253, 249, 0.96), transparent);
-}
-
-.ticket-scroll-area::after {
-  inset-block-end: var(--space-3);
-  background: linear-gradient(0deg, rgba(255, 248, 242, 0.96), transparent);
 }
 
 .ticket-list {
@@ -1053,9 +1024,8 @@
   max-height: 100%;
   display: grid;
   align-content: start;
-  gap: var(--space-3);
   overflow-y: auto;
-  padding: var(--space-2) var(--space-2) var(--space-2) 0;
+  padding-inline-end: var(--space-2);
   overscroll-behavior: contain;
   scrollbar-color: rgba(185, 111, 82, 0.42) rgba(126, 99, 81, 0.08);
   scrollbar-width: thin;
@@ -1078,11 +1048,12 @@
 .ticket-card {
   display: grid;
   gap: var(--space-4);
-  padding: var(--space-4);
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.34);
-  background: rgba(255, 255, 255, 0.58);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.64);
+  padding-block: var(--space-4);
+  border-block-end: 1px solid rgba(126, 99, 81, 0.14);
+}
+
+.ticket-card:last-child {
+  border-block-end: 0;
 }
 
 .ticket-card__top,
