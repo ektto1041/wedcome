@@ -1,16 +1,26 @@
 import { ChapterNavigation } from './components/ChapterNavigation'
-import { HeroSection } from './sections/HeroSection'
+import { HeroImageSection, HeroSection } from './sections/HeroSection'
 import { IntroSection } from './sections/IntroSection'
 import { MoneyGiftSection } from './sections/MoneyGiftSection'
+import { ParkingSection } from './sections/ParkingSection'
 import { WeddingInfoSection } from './sections/WeddingInfoSection'
 
-function App() {
+export type InvitationVersion = 'default' | 'v2'
+
+type AppProps = {
+  version: InvitationVersion
+}
+
+function App({ version }: AppProps) {
+  const isV2 = version === 'v2'
+
   return (
-    <main className="page">
+    <main className={`page ${isV2 ? 'page--v2' : ''}`}>
       <div className="container invitation-shell">
-        <HeroSection />
+        {isV2 ? <HeroImageSection /> : <HeroSection />}
         <IntroSection />
         <WeddingInfoSection />
+        <ParkingSection />
         <MoneyGiftSection />
       </div>
       <ChapterNavigation />

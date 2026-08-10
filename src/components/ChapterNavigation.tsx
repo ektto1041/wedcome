@@ -10,6 +10,7 @@ const chapters = [
   { id: 'home', label: '처음' },
   { id: 'invitation', label: '초대' },
   { id: 'wedding-info', label: '예식' },
+  { id: 'parking', label: '주차' },
   { id: 'gift', label: '마음' },
 ] as const
 
