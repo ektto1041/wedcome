@@ -1,4 +1,4 @@
-import parkingMap from '../assets/images/parking-map.jpeg'
+import parkingMap from '../assets/images/parking-map-aerial-annotated.webp'
 import { SectionTitle } from '../components/SectionTitle'
 
 export function ParkingSection() {
@@ -13,13 +13,13 @@ export function ParkingSection() {
       <figure className="parking-map">
         <img
           src={parkingMap}
-          width="1023"
-          height="927"
+          width="1087"
+          height="1447"
           loading="lazy"
           decoding="async"
-          alt="천자문 광장과 성곽 대형주차장 위치를 표시한 내부 약도"
+          alt="성곽 대형주차장에서 천자문 광장 예식장까지의 이동 경로와 이용 불가 주차장을 표시한 위성 안내도"
         />
-        <figcaption>내부 약도</figcaption>
+        <figcaption>주차 및 예식장 이동 안내</figcaption>
       </figure>
 
       <div className="content-narrow parking-section__content">
