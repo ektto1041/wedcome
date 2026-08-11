@@ -19,7 +19,6 @@ export function ParkingSection() {
           decoding="async"
           alt="성곽 대형주차장에서 천자문 광장 예식장까지의 이동 경로와 이용 불가 주차장을 표시한 위성 안내도"
         />
-        <figcaption>주차 및 예식장 이동 안내</figcaption>
       </figure>
 
       <div className="content-narrow parking-section__content">

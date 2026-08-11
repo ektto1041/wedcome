@@ -1166,19 +1166,6 @@
   height: auto;
 }
 
-.parking-map figcaption {
-  position: absolute;
-  inset-block-start: var(--space-3);
-  inset-inline-start: var(--space-3);
-  padding: 7px 11px;
-  border-radius: 999px;
-  background: rgba(43, 33, 29, 0.82);
-  color: #fffdf9;
-  font-size: 0.8125rem;
-  font-weight: 700;
-  backdrop-filter: blur(8px);
-}
-
 .parking-section__content {
   display: grid;
   gap: var(--space-5);
