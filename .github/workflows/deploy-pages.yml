@@ -42,6 +42,8 @@ jobs:
 
       - name: Build
         run: pnpm build
+        env:
+          VITE_NAVER_MAP_CLIENT_ID: ${{ secrets.VITE_NAVER_MAP_CLIENT_ID }}
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
