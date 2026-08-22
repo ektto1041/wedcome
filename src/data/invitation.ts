@@ -40,41 +40,50 @@ export const invitation = {
     bookingNote:
       '코레일 예매 화면에서 출발역을 서울역 또는 청량리역, 도착역을 안동역으로 입력해 조회해 주세요.',
   },
-  message: `삼가 아뢰옵니다.
+  message: `수많은 사람 가운데
+한 사람에게 시선이 머무는 것은
+남들은 미처 보지 못한 것을 알아본 까닭이겠지요.
 
-하늘이 맺어 주신 귀한 인연을 받들어
-길한 날을 택하여 혼례를 올리고자 하옵니다.
+서로에게서 발견한 특별함을 품고
+앞으로의 평범한 날들도 함께하려고 합니다.
 
-바쁘신 가운데에도 부디 귀한 걸음을 하시어
-두 사람의 새로운 시작을 함께 축복하여 주신다면,
-그 은혜와 기쁨을 오래도록 마음 깊이 간직하겠사옵니다.
-
-이날의 자리가 더욱 빛날 수 있도록
-부디 자리를 함께하여 주시기를
-삼가 청하옵니다.
-
-귀한 발걸음으로 함께해 주시는 것만으로도
-더없는 영광이오며,
-베푸는 음식과 술 또한 감사한 마음을 담아
-정성껏 마련하였사오니
-편안한 마음으로 함께하시어
-기쁜 시간을 나누어 주시면 더욱 감사하겠사옵니다.
-
-부디 평안히 오시어
-두 사람의 앞날을 따뜻한 마음으로 축복하여 주시기를
-삼가 바라옵니다.`,
+그 시작에 함께해 주시면 감사하겠습니다.`,
   bankAccounts: [
     {
       id: 'groom',
       label: '신랑측',
-      bankName: '국민',
-      accountNumber: '61030204026579',
+      accounts: [
+        {
+          id: 'groom-parent',
+          accountHolder: '박종철',
+          bankName: '농협',
+          accountNumber: '747084 52 046428',
+        },
+        {
+          id: 'groom-couple',
+          accountHolder: '박상연',
+          bankName: '국민',
+          accountNumber: '61030204026579',
+        },
+      ],
     },
     {
       id: 'bride',
       label: '신부측',
-      bankName: '카카오',
-      accountNumber: '3333067428840',
+      accounts: [
+        {
+          id: 'bride-parent',
+          accountHolder: '김건태',
+          bankName: '국민은행',
+          accountNumber: '668825 01 031323',
+        },
+        {
+          id: 'bride-couple',
+          accountHolder: '김영진',
+          bankName: '카카오',
+          accountNumber: '3333067428840',
+        },
+      ],
     },
   ],
   gallery: [

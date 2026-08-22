@@ -48,36 +48,45 @@ export function MoneyGiftSection() {
         description="참석이 어려우신 분들을 위해 계좌번호를 함께 안내드립니다."
       />
       <div className="gift-account-list">
-        {invitation.bankAccounts.map((account) => {
-          const isCopied = copiedAccountId === account.id
+        {invitation.bankAccounts.map((group) => (
+          <section key={group.id} className="gift-account-group">
+            <h3 className="gift-account-group__title">{group.label}</h3>
+            {group.accounts.map((account) => {
+              const isCopied = copiedAccountId === account.id
 
-          return (
-            <article key={account.id} className="gift-account-card">
-              <div className="gift-account-card__body">
-                <p className="gift-account-card__label">{account.label}</p>
-                <div className="gift-account-card__details">
-                  <p className="gift-account-card__bank">{account.bankName}</p>
-                  <p className="gift-account-card__number">
-                    {account.accountNumber}
-                  </p>
-                </div>
-              </div>
-              <button
-                type="button"
-                className="gift-account-card__copy"
-                onClick={() =>
-                  handleCopy(
-                    account.id,
-                    account.bankName,
-                    account.accountNumber,
-                  )
-                }
-              >
-                {isCopied ? '완료' : '복사'}
-              </button>
-            </article>
-          )
-        })}
+              return (
+                <article key={account.id} className="gift-account-card">
+                  <div className="gift-account-card__body">
+                    <p className="gift-account-card__holder">
+                      예금주 {account.accountHolder}
+                    </p>
+                    <div className="gift-account-card__details">
+                      <p className="gift-account-card__bank">
+                        {account.bankName}
+                      </p>
+                      <p className="gift-account-card__number">
+                        {account.accountNumber}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    className="gift-account-card__copy"
+                    onClick={() =>
+                      handleCopy(
+                        account.id,
+                        account.bankName,
+                        account.accountNumber,
+                      )
+                    }
+                  >
+                    {isCopied ? '완료' : '복사'}
+                  </button>
+                </article>
+              )
+            })}
+          </section>
+        ))}
       </div>
     </section>
   )
