@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import loverThemeMusic from './assets/audio/lover-theme.mp3'
 import { ChapterNavigation } from './components/ChapterNavigation'
 import { ThemeSplash } from './components/ThemeSplash'
+import { useInvitationAssetPreload } from './hooks/useInvitationAssetPreload'
 import { HeroImageSection, HeroSection } from './sections/HeroSection'
 import { IntroSection } from './sections/IntroSection'
 import { MoneyGiftSection } from './sections/MoneyGiftSection'
@@ -21,6 +22,8 @@ function App({ version }: AppProps) {
   const [isSplashVisible, setIsSplashVisible] = useState(true)
   const [hasOpenedInvitation, setHasOpenedInvitation] = useState(false)
   const [isMusicPlaying, setIsMusicPlaying] = useState(false)
+  const { retry: retryAssetLoad, status: assetLoadStatus } =
+    useInvitationAssetPreload()
   const musicRef = useRef<HTMLAudioElement>(null)
   const musicControlRef = useRef<HTMLButtonElement>(null)
 
@@ -80,8 +83,10 @@ function App({ version }: AppProps) {
     <>
       {isSplashVisible ? (
         <ThemeSplash
+          assetLoadStatus={assetLoadStatus}
           onComplete={() => setIsSplashVisible(false)}
           onOpen={() => setHasOpenedInvitation(true)}
+          onRetry={retryAssetLoad}
         />
       ) : null}
       <main className={`page ${isV2 ? 'page--v2' : ''}`}>
@@ -103,7 +108,7 @@ function App({ version }: AppProps) {
         loop
         onPause={() => setIsMusicPlaying(false)}
         onPlay={() => setIsMusicPlaying(true)}
-        preload="none"
+        preload="auto"
         ref={musicRef}
         src={loverThemeMusic}
       />

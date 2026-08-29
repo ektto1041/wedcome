@@ -21,6 +21,7 @@
 .theme-splash__image {
   position: absolute;
   inset: 0;
+  z-index: 1;
   width: 100%;
   height: 100%;
   max-width: none;
@@ -28,6 +29,26 @@
   pointer-events: none;
   user-select: none;
   animation: splash-content-in 500ms ease-out both;
+}
+
+.theme-splash__surface {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.theme-splash__surface:disabled {
+  cursor: wait;
+}
+
+.theme-splash__surface:focus-visible {
+  outline: 3px solid rgba(81, 71, 64, 0.42);
+  outline-offset: -6px;
 }
 
 .theme-splash__title,
@@ -40,6 +61,7 @@
 }
 
 .theme-splash__title {
+  pointer-events: none;
   animation: splash-content-in 500ms ease-out both;
 }
 
@@ -51,6 +73,7 @@
 }
 
 .theme-splash__prompt {
+  z-index: 3;
   inset-block-end: max(18vh, calc(env(safe-area-inset-bottom) + 112px));
   inset-inline: auto;
   inset-inline-start: 50%;
@@ -80,9 +103,40 @@
   outline-offset: 3px;
 }
 
+.theme-splash__prompt:disabled {
+  cursor: wait;
+}
+
+.theme-splash__loading-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+}
+
+.theme-splash__spinner {
+  width: 15px;
+  height: 15px;
+  border: 1.5px solid rgba(81, 71, 64, 0.24);
+  border-block-start-color: #514740;
+  border-radius: 50%;
+  animation: splash-spinner-rotate 720ms linear infinite;
+}
+
 .theme-splash__prompt-text {
   display: inline-block;
-  animation: splash-prompt-pulse 2400ms ease-in-out 1500ms infinite;
+}
+
+.theme-splash__prompt.is-ready .theme-splash__prompt-text {
+  animation:
+    splash-prompt-ready-in 400ms ease-out both,
+    splash-prompt-pulse 2400ms ease-in-out 400ms infinite;
+}
+
+.theme-splash__prompt.is-error .theme-splash__prompt-text {
+  font-size: 0.86em;
+  letter-spacing: 0;
+  animation: splash-prompt-ready-in 400ms ease-out both;
 }
 
 .theme-splash:focus-visible {
@@ -182,6 +236,22 @@
   }
 }
 
+@keyframes splash-prompt-ready-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes splash-spinner-rotate {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .theme-splash {
     transition: none;
@@ -190,7 +260,8 @@
   .theme-splash__image,
   .theme-splash__title,
   .theme-splash__prompt,
-  .theme-splash__prompt-text {
+  .theme-splash__prompt-text,
+  .theme-splash__spinner {
     animation: none;
   }
 }
