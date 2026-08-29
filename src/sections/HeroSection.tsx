@@ -21,11 +21,11 @@ const SCROLL_INDICATOR_FADE_END_PX = 140
 
 const STORY_PICKERS = {
   bride: {
-    nickname: 'yoooungenie',
+    nickname: 'genie',
     profileImage: brideProfileImage,
   },
   groom: {
-    nickname: 'sangyeon.park',
+    nickname: 'yeonie',
     profileImage: groomProfileImage,
   },
 } as const
@@ -97,8 +97,8 @@ export function HeroImageSection() {
       <img
         className="hero-section__image"
         src={heroImage}
-        width="1800"
-        height="1350"
+        width="1440"
+        height="1080"
         alt={`${invitation.couple.groom}과 ${invitation.couple.bride}의 웨딩 이미지`}
       />
     </section>
@@ -664,8 +664,8 @@ export function HeroSection({ isPlaybackEnabled }: HeroSectionProps) {
       <img
         className="hero-section__image hero-story__fallback"
         src={heroImage}
-        width="1800"
-        height="1350"
+        width="1440"
+        height="1080"
         alt={`${invitation.couple.groom}과 ${invitation.couple.bride}의 웨딩 이미지`}
       />
 
