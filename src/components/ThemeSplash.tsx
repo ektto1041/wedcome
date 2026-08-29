@@ -39,11 +39,10 @@ export function ThemeSplash({ onComplete, onOpen }: ThemeSplashProps) {
   }
 
   return (
-    <button
+    <section
       className={`theme-splash ${isLeaving ? 'is-leaving' : ''}`}
-      aria-label="영진과 상연의 청첩장 열기"
+      aria-label="영진과 상연의 청첩장 시작 화면"
       onClick={closeSplash}
-      type="button"
     >
       <img
         alt="백년가약 글귀와 전통 혼례 가마를 그린 청첩장 그림"
@@ -57,10 +56,16 @@ export function ThemeSplash({ onComplete, onOpen }: ThemeSplashProps) {
         {invitation.couple.bride}과 {invitation.couple.groom}
       </span>
 
-      <span className="theme-splash__details">
-        <span>{invitation.wedding.dateLabel}</span>
-        <span>{invitation.wedding.venueName}</span>
-      </span>
-    </button>
+      <button
+        className="theme-splash__prompt"
+        onClick={(event) => {
+          event.stopPropagation()
+          closeSplash()
+        }}
+        type="button"
+      >
+        <span className="theme-splash__prompt-text">청첩장 확인하기</span>
+      </button>
+    </section>
   )
 }
