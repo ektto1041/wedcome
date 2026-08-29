@@ -1,5 +1,6 @@
 @import "./tokens.css";
 @import "./layout.css";
+@import "./theme-splash.css";
 
 @font-face {
   font-family: "Yeongwol";
@@ -38,12 +39,12 @@ html {
   background:
     radial-gradient(
       circle at 12% 14%,
-      rgba(255, 226, 214, 0.42),
+      var(--page-glow-start),
       transparent 26%
     ),
     radial-gradient(
       circle at 88% 18%,
-      rgba(229, 237, 255, 0.34),
+      var(--page-glow-end),
       transparent 24%
     ),
     radial-gradient(
@@ -51,12 +52,20 @@ html {
       rgba(241, 232, 255, 0.18),
       transparent 30%
     ),
-    linear-gradient(180deg, #fffdfb 0%, #fbf8f5 52%, #f7f3f1 100%);
+    linear-gradient(
+      180deg,
+      var(--page-background-start) 0%,
+      var(--color-background) 52%,
+      var(--page-background-end) 100%
+    );
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-attachment: fixed;
+  transition:
+    color 500ms ease,
+    background-color 500ms ease;
 }
 
 html[data-invitation-version="v2"] {
@@ -74,6 +83,11 @@ body.is-drawer-open {
 }
 
 body.is-gallery-open {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+body.is-splash-open {
   overflow: hidden;
   overscroll-behavior: none;
 }

@@ -7,6 +7,10 @@
   --color-line: rgba(120, 102, 94, 0.18);
   --color-accent: #9f5f4c;
   --color-accent-soft: rgba(159, 95, 76, 0.12);
+  --page-background-start: #fffdfb;
+  --page-background-end: #f7f3f1;
+  --page-glow-start: rgba(255, 226, 214, 0.42);
+  --page-glow-end: rgba(229, 237, 255, 0.34);
   --glass-surface:
     linear-gradient(
       135deg,
