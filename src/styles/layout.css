@@ -250,9 +250,12 @@
 
 .hero-section {
   position: relative;
-  width: 100%;
-  max-width: 100%;
-  justify-self: stretch;
+  width: min(
+    calc(100% + var(--page-padding) + var(--page-padding)),
+    var(--container-max)
+  );
+  max-width: none;
+  justify-self: center;
   min-height: 100vh;
   display: flex;
   align-items: flex-end;

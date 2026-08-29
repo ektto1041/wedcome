@@ -68,7 +68,7 @@
   position: fixed;
   inset-block-start: calc(env(safe-area-inset-top) + 27px);
   inset-inline-end: max(
-    calc(var(--page-padding) + 14px),
+    14px,
     calc((100vw - var(--container-max)) / 2 + 14px)
   );
   z-index: 20;
