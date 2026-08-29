@@ -7,6 +7,8 @@ import {
   useRef,
   useState,
 } from 'react'
+import brideProfileImage from '../assets/images/bride-profile.jpg'
+import groomProfileImage from '../assets/images/groom-profile.jpg'
 import heroImage from '../assets/images/hero-image.jpg'
 import { heroStories } from '../data/heroStories'
 import { invitation } from '../data/invitation'
@@ -16,6 +18,17 @@ const TAP_MOVE_TOLERANCE_PX = 12
 const HERO_VISIBILITY_THRESHOLD = 0.35
 const SCROLL_INDICATOR_FADE_START_PX = 24
 const SCROLL_INDICATOR_FADE_END_PX = 140
+
+const STORY_PICKERS = {
+  bride: {
+    nickname: 'yoooungenie',
+    profileImage: brideProfileImage,
+  },
+  groom: {
+    nickname: 'sangyeon.park',
+    profileImage: groomProfileImage,
+  },
+} as const
 
 type PressPoint = {
   x: number
@@ -60,6 +73,24 @@ function HeroProgress({
   )
 }
 
+function StoryPicker({ index }: { index: number }) {
+  const role = index % 2 === 0 ? 'bride' : 'groom'
+  const picker = STORY_PICKERS[role]
+
+  return (
+    <div className="hero-story__picker">
+      <span className="visually-hidden">이 장면을 고른 사람:</span>
+      <span
+        className={`hero-story__avatar hero-story__avatar--${role}`}
+        aria-hidden="true"
+      >
+        <img src={picker.profileImage} alt="" />
+      </span>
+      <span className="hero-story__nickname">{picker.nickname}</span>
+    </div>
+  )
+}
+
 export function HeroImageSection() {
   return (
     <section id="home" className="hero-section">
@@ -70,20 +101,21 @@ export function HeroImageSection() {
         height="1350"
         alt={`${invitation.couple.groom}과 ${invitation.couple.bride}의 웨딩 이미지`}
       />
-      <div className="hero-section__content">
-        <h1 className="hero-section__title">
-          {invitation.couple.bride}과 {invitation.couple.groom}
-        </h1>
-      </div>
     </section>
   )
 }
 
-export function HeroSection() {
+type HeroSectionProps = {
+  isPlaybackEnabled: boolean
+}
+
+export function HeroSection({ isPlaybackEnabled }: HeroSectionProps) {
   const sectionRef = useRef<HTMLElement>(null)
   const scrollIndicatorRef = useRef<HTMLDivElement>(null)
   const videoRefs = useRef(new Map<string, HTMLVideoElement>())
+  const imageRefs = useRef(new Map<string, HTMLImageElement>())
   const animationFrameRef = useRef<number | null>(null)
+  const imageProgressRef = useRef(0)
   const pendingStoryIdRef = useRef<string | null>(null)
   const pressStartedAtRef = useRef(0)
   const pressStartPointRef = useRef<PressPoint | null>(null)
@@ -116,7 +148,14 @@ export function HeroSection() {
     availableStories.length > 1
       ? availableStories[(activeIndex + 1) % availableStories.length]
       : null
-  const motionPlaybackAllowed = !prefersReducedMotion || hasUserStarted
+  const previousStory =
+    availableStories.length > 1
+      ? availableStories[
+          (activeIndex - 1 + availableStories.length) % availableStories.length
+        ]
+      : null
+  const motionPlaybackAllowed =
+    isPlaybackEnabled && (!prefersReducedMotion || hasUserStarted)
   const shouldPlay =
     activeStory !== null &&
     motionPlaybackAllowed &&
@@ -127,7 +166,10 @@ export function HeroSection() {
   const isPlaybackPaused =
     !motionPlaybackAllowed || isManuallyPaused || !isInView || isPageHidden
   const renderedStories = availableStories.filter(
-    (story) => story.id === activeStory?.id || story.id === nextStory?.id,
+    (story) =>
+      story.id === activeStory?.id ||
+      story.id === nextStory?.id ||
+      story.id === previousStory?.id,
   )
 
   const completeStoryTransition = useCallback(
@@ -136,24 +178,27 @@ export function HeroSection() {
         return
       }
 
-      const currentVideo = videoRefs.current.get(activeStory.id)
-      const nextVideo = videoRefs.current.get(nextStoryId)
-      if (!nextVideo) {
+      const targetStory = availableStories[nextIndex]
+      if (!targetStory) {
         return
       }
 
-      currentVideo?.pause()
-      nextVideo.currentTime = 0
+      videoRefs.current.get(activeStory.id)?.pause()
+      const nextVideo = videoRefs.current.get(nextStoryId)
+      if (targetStory.type === 'video' && nextVideo) {
+        nextVideo.currentTime = 0
+      }
       pendingStoryIdRef.current = null
       setReadyStoryIds((currentIds) => {
         const nextIds = new Set(currentIds)
         nextIds.add(nextStoryId)
         return nextIds
       })
+      imageProgressRef.current = 0
       setProgress(0)
       setActiveIndex(nextIndex)
     },
-    [activeStory],
+    [activeStory, availableStories],
   )
 
   const goToNextStory = useCallback(() => {
@@ -162,15 +207,18 @@ export function HeroSection() {
     }
 
     if (availableStories.length === 1) {
-      const video = activeStory
-        ? videoRefs.current.get(activeStory.id)
-        : undefined
+      const video =
+        activeStory?.type === 'video'
+          ? videoRefs.current.get(activeStory.id)
+          : undefined
       if (video) {
         video.currentTime = 0
         if (shouldPlay) {
           void video.play().catch(() => setIsManuallyPaused(true))
         }
       }
+      imageProgressRef.current = 0
+      setProgress(0)
       return
     }
 
@@ -180,20 +228,96 @@ export function HeroSection() {
 
     const nextIndex = (activeIndex + 1) % availableStories.length
     const targetStory = availableStories[nextIndex]
-    const targetVideo = targetStory
-      ? videoRefs.current.get(targetStory.id)
-      : undefined
-    if (!targetStory || !targetVideo) {
+    const targetVideo =
+      targetStory?.type === 'video'
+        ? videoRefs.current.get(targetStory.id)
+        : undefined
+    const targetImage =
+      targetStory?.type === 'image'
+        ? imageRefs.current.get(targetStory.id)
+        : undefined
+    if (!targetStory) {
       return
     }
 
-    if (targetVideo.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+    const isTargetReady =
+      (targetStory.type === 'video' &&
+        targetVideo?.readyState !== undefined &&
+        targetVideo.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) ||
+      (targetStory.type === 'image' &&
+        targetImage?.complete === true &&
+        targetImage.naturalWidth > 0)
+
+    if (isTargetReady) {
       completeStoryTransition(nextIndex, targetStory.id)
       return
     }
 
     pendingStoryIdRef.current = targetStory.id
-    targetVideo.load()
+    targetVideo?.load()
+  }, [
+    activeIndex,
+    activeStory,
+    availableStories,
+    completeStoryTransition,
+    shouldPlay,
+  ])
+
+  const goToPreviousStory = useCallback(() => {
+    if (availableStories.length === 0) {
+      return
+    }
+
+    if (availableStories.length === 1) {
+      const video =
+        activeStory?.type === 'video'
+          ? videoRefs.current.get(activeStory.id)
+          : undefined
+      if (video) {
+        video.currentTime = 0
+        if (shouldPlay) {
+          void video.play().catch(() => setIsManuallyPaused(true))
+        }
+      }
+      imageProgressRef.current = 0
+      setProgress(0)
+      return
+    }
+
+    if (pendingStoryIdRef.current !== null) {
+      return
+    }
+
+    const previousIndex =
+      (activeIndex - 1 + availableStories.length) % availableStories.length
+    const targetStory = availableStories[previousIndex]
+    const targetVideo =
+      targetStory?.type === 'video'
+        ? videoRefs.current.get(targetStory.id)
+        : undefined
+    const targetImage =
+      targetStory?.type === 'image'
+        ? imageRefs.current.get(targetStory.id)
+        : undefined
+    if (!targetStory) {
+      return
+    }
+
+    const isTargetReady =
+      (targetStory.type === 'video' &&
+        targetVideo?.readyState !== undefined &&
+        targetVideo.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) ||
+      (targetStory.type === 'image' &&
+        targetImage?.complete === true &&
+        targetImage.naturalWidth > 0)
+
+    if (isTargetReady) {
+      completeStoryTransition(previousIndex, targetStory.id)
+      return
+    }
+
+    pendingStoryIdRef.current = targetStory.id
+    targetVideo?.load()
   }, [
     activeIndex,
     activeStory,
@@ -218,6 +342,12 @@ export function HeroSection() {
     mediaQuery.addEventListener('change', handleChange)
     return () => mediaQuery.removeEventListener('change', handleChange)
   }, [])
+
+  useEffect(() => {
+    if (isPlaybackEnabled) {
+      setHasUserStarted(true)
+    }
+  }, [isPlaybackEnabled])
 
   useEffect(() => {
     const handleVisibilityChange = () => setIsPageHidden(document.hidden)
@@ -284,6 +414,10 @@ export function HeroSection() {
       return
     }
 
+    if (activeStory.type !== 'video') {
+      return
+    }
+
     const video = videoRefs.current.get(activeStory.id)
     if (!video) {
       return
@@ -298,7 +432,7 @@ export function HeroSection() {
   }, [activeStory, shouldPlay])
 
   useEffect(() => {
-    if (!activeStory || !shouldPlay) {
+    if (activeStory?.type !== 'video' || !shouldPlay) {
       return
     }
 
@@ -320,7 +454,48 @@ export function HeroSection() {
   }, [activeStory, shouldPlay])
 
   useEffect(() => {
+    if (
+      activeStory?.type !== 'image' ||
+      !shouldPlay ||
+      !readyStoryIds.has(activeStory.id)
+    ) {
+      return
+    }
+
+    const initialProgress = imageProgressRef.current
+    const startedAt = performance.now()
+
+    const updateProgress = (now: number) => {
+      const nextProgress =
+        initialProgress + (now - startedAt) / activeStory.durationMs
+
+      if (nextProgress >= 1) {
+        imageProgressRef.current = 1
+        setProgress(1)
+        goToNextStory()
+        return
+      }
+
+      imageProgressRef.current = nextProgress
+      setProgress(nextProgress)
+      animationFrameRef.current = window.requestAnimationFrame(updateProgress)
+    }
+
+    animationFrameRef.current = window.requestAnimationFrame(updateProgress)
+    return () => {
+      if (animationFrameRef.current !== null) {
+        window.cancelAnimationFrame(animationFrameRef.current)
+        animationFrameRef.current = null
+      }
+    }
+  }, [activeStory, shouldPlay, readyStoryIds, goToNextStory])
+
+  useEffect(() => {
     if (!nextStory) {
+      return
+    }
+
+    if (nextStory.type !== 'video') {
       return
     }
 
@@ -387,7 +562,15 @@ export function HeroSection() {
     releaseHold()
 
     if (isTap) {
-      goToNextStory()
+      const bounds = event.currentTarget.getBoundingClientRect()
+      const isPreviousDirection =
+        event.clientX < bounds.left + bounds.width / 2
+
+      if (isPreviousDirection) {
+        goToPreviousStory()
+      } else {
+        goToNextStory()
+      }
     }
   }
 
@@ -402,6 +585,29 @@ export function HeroSection() {
   }
 
   const handleVideoCanPlay = (storyId: string) => {
+    setReadyStoryIds((currentIds) => {
+      if (currentIds.has(storyId)) {
+        return currentIds
+      }
+
+      const nextIds = new Set(currentIds)
+      nextIds.add(storyId)
+      return nextIds
+    })
+
+    if (pendingStoryIdRef.current !== storyId) {
+      return
+    }
+
+    const nextIndex = availableStories.findIndex(
+      (story) => story.id === storyId,
+    )
+    if (nextIndex >= 0) {
+      completeStoryTransition(nextIndex, storyId)
+    }
+  }
+
+  const handleImageLoad = (storyId: string) => {
     setReadyStoryIds((currentIds) => {
       if (currentIds.has(storyId)) {
         return currentIds
@@ -445,6 +651,7 @@ export function HeroSection() {
     })
 
     if (wasActiveStory) {
+      imageProgressRef.current = 0
       setProgress(0)
       setActiveIndex(
         failedIndex >= availableStories.length - 1 ? 0 : failedIndex,
@@ -465,11 +672,33 @@ export function HeroSection() {
       {renderedStories.map((story) => {
         const isActive = story.id === activeStory?.id
         const classNames = [
-          'hero-story__video',
+          'hero-story__media',
           isActive && readyStoryIds.has(story.id) ? 'is-active' : '',
         ]
           .filter(Boolean)
           .join(' ')
+
+        if (story.type === 'image') {
+          return (
+            <img
+              alt={isActive ? story.label : ''}
+              aria-hidden={!isActive}
+              className={classNames}
+              fetchPriority={isActive ? 'high' : 'auto'}
+              key={story.id}
+              onError={() => handleVideoError(story.id)}
+              onLoad={() => handleImageLoad(story.id)}
+              ref={(image) => {
+                if (image) {
+                  imageRefs.current.set(story.id, image)
+                } else {
+                  imageRefs.current.delete(story.id)
+                }
+              }}
+              src={story.src}
+            />
+          )
+        }
 
         return (
           <video
@@ -507,11 +736,12 @@ export function HeroSection() {
             progress={progress}
             storyIds={availableStories.map((story) => story.id)}
           />
+          <StoryPicker index={activeIndex} />
           <p className="hero-story__status" aria-live="polite">
-            총 {availableStories.length}개 중 {activeIndex + 1}번째 영상
+            총 {availableStories.length}개 중 {activeIndex + 1}번째 스토리
           </p>
           <button
-            aria-label="다음 영상 보기. 길게 누르면 일시정지합니다."
+            aria-label="화면 왼쪽은 이전 스토리, 오른쪽은 다음 스토리입니다. 길게 누르면 일시정지합니다."
             className="hero-story__interaction"
             onClick={(event) => {
               if (event.detail === 0) {
@@ -520,6 +750,14 @@ export function HeroSection() {
             }}
             onContextMenu={(event) => event.preventDefault()}
             onKeyDown={(event) => {
+              if (event.code === 'ArrowLeft') {
+                event.preventDefault()
+                goToPreviousStory()
+              }
+              if (event.code === 'ArrowRight') {
+                event.preventDefault()
+                goToNextStory()
+              }
               if (event.code === 'Space') {
                 event.preventDefault()
                 handlePlaybackToggle()
@@ -532,7 +770,7 @@ export function HeroSection() {
             type="button"
           />
           <button
-            aria-label={isPlaybackPaused ? '영상 재생' : '영상 일시정지'}
+            aria-label={isPlaybackPaused ? '스토리 재생' : '스토리 일시정지'}
             className="hero-story__playback"
             onClick={handlePlaybackToggle}
             type="button"
@@ -549,12 +787,6 @@ export function HeroSection() {
           </button>
         </>
       )}
-
-      <div className="hero-section__content">
-        <h1 className="hero-section__title">
-          {invitation.couple.bride}과 {invitation.couple.groom}
-        </h1>
-      </div>
 
       <div
         className="hero-scroll-indicator"
