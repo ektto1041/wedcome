@@ -18,6 +18,7 @@ import fourthStoryVideo from '../assets/videos/video6.mp4'
 export type InvitationAssetStatus = 'loading' | 'ready' | 'error'
 
 const MINIMUM_LOADING_DURATION_MS = 500
+const MAXIMUM_LOADING_DURATION_MS = 3000
 
 const invitationAssetUrls = [
   splashImage,
@@ -64,9 +65,14 @@ async function loadInvitationFonts() {
 async function loadInvitationAssets() {
   const startedAt = performance.now()
 
-  await Promise.all([
-    ...invitationAssetUrls.map(downloadAsset),
-    loadInvitationFonts(),
+  await Promise.race([
+    Promise.all([
+      ...invitationAssetUrls.map(downloadAsset),
+      loadInvitationFonts(),
+    ]),
+    new Promise<void>((resolve) => {
+      window.setTimeout(resolve, MAXIMUM_LOADING_DURATION_MS)
+    }),
   ])
 
   const remainingDelay = Math.max(
