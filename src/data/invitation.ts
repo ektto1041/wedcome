@@ -74,13 +74,13 @@ export const invitation = {
         {
           id: 'bride-parent',
           accountHolder: '김건태',
-          bankName: '국민은행',
+          bankName: '국민',
           accountNumber: '668825 01 031323',
         },
         {
           id: 'bride-couple',
           accountHolder: '김영진',
-          bankName: '국민은행',
+          bankName: '국민',
           accountNumber: '920302 01 380539',
         },
       ],
