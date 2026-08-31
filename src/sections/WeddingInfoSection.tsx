@@ -17,7 +17,7 @@ export function WeddingInfoSection() {
       <dl className="info-list">
         <div>
           <dt>일시</dt>
-          <dd>{invitation.wedding.dateLabel}</dd>
+          <dd className="info-list__date">{invitation.wedding.dateLabel}</dd>
         </div>
         <div>
           <dt>장소</dt>

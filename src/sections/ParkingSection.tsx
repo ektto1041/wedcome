@@ -25,7 +25,11 @@ export function ParkingSection() {
         <div className="parking-notice" role="note">
           <p className="parking-notice__title">방문 전 꼭 확인해 주세요</p>
           <ul>
-            <li>예식 당일에는 주차요원의 안내에 따라 이동해 주세요.</li>
+            <li>
+              예식 당일에는 주차요원의 안내에
+              <br />
+              따라 이동해 주세요.
+            </li>
             <li>
               동승객은 예식장 인근에서 먼저 내리고, 차량 대표 한 분이 성곽
               대형주차장에 주차한 뒤 오시면 됩니다.

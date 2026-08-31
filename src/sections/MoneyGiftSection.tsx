@@ -45,7 +45,13 @@ export function MoneyGiftSection() {
       <SectionTitle
         eyebrow="Gift"
         title="마음 전하실 곳"
-        description="참석이 어려우신 분들을 위해 계좌번호를 함께 안내드립니다."
+        description={
+          <>
+            참석이 어려우신 분들을 위해 계좌번호를
+            <br />
+            함께 안내드립니다.
+          </>
+        }
       />
       <div className="gift-account-list">
         {invitation.bankAccounts.map((group) => (

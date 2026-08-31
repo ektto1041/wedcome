@@ -6,7 +6,8 @@ export const invitation = {
     bride: '영진',
   },
   wedding: {
-    dateLabel: '2026년 10월 3일 토요일 오후 4시 30분',
+    dateLabel: `2026년 10월 3일 토요일
+오후 4시 30분`,
     venueName: '전통리조트 구름에',
     address: '경상북도 안동시 민속촌길 190',
     mapQuery: '전통리조트 구름에',
@@ -42,7 +43,8 @@ export const invitation = {
   },
   message: `수많은 사람 가운데
 한 사람에게 시선이 머무는 것은
-남들은 미처 보지 못한 것을 알아본 까닭이겠지요.
+남들은 미처 보지 못한 것을 알아본
+까닭이겠지요.
 
 서로에게서 발견한 특별함을 품고
 앞으로의 평범한 날들도 함께하려고 합니다.

@@ -524,6 +524,10 @@
   font-size: 0.9375rem;
 }
 
+.info-list__date {
+  white-space: pre-line;
+}
+
 .info-list div.info-list__action {
   grid-template-columns: max-content minmax(0, 1fr);
 }

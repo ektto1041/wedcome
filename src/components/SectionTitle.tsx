@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
+import { type ReactNode, useEffect, useRef, useState } from 'react'
 
 type SectionTitleProps = {
   eyebrow: string
   title: string
-  description?: string
+  description?: ReactNode
   titleId?: string
 }
 
