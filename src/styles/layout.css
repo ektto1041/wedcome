@@ -259,7 +259,7 @@
 .intro-hosts p {
   width: fit-content;
   display: grid;
-  grid-template-columns: 8.5em 3.5em 2.5em;
+  grid-template-columns: max-content 3.5em max-content;
   align-items: baseline;
   column-gap: 0.4em;
   margin: 0 auto;
