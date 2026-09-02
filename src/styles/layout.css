@@ -248,6 +248,10 @@
   white-space: pre-line;
 }
 
+.intro-message__keep-together {
+  white-space: nowrap;
+}
+
 .intro-hosts {
   width: min(100%, 360px);
   display: grid;
@@ -275,8 +279,15 @@
 }
 
 .intro-hosts__relation {
+  display: grid;
+  grid-template-columns: max-content 2em;
+  column-gap: 0.3em;
   color: var(--color-text-muted);
   text-align: start;
+}
+
+.intro-hosts__relation-kind {
+  text-align: center;
 }
 
 .intro-hosts__parents {

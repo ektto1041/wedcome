@@ -5,6 +5,17 @@ type IntroSectionProps = {
   showHosts?: boolean
 }
 
+const V2_KEEP_TOGETHER_PHRASES = [
+  {
+    source: '알아본\n까닭이겠지요.',
+    text: '알아본 까닭이겠지요.',
+  },
+  {
+    source: '함께하려고 합니다.',
+    text: '함께하려고 합니다.',
+  },
+] as const
+
 export function IntroSection({ showHosts = false }: IntroSectionProps) {
   const paragraphs = invitation.message.split('\n\n')
 
@@ -12,9 +23,32 @@ export function IntroSection({ showHosts = false }: IntroSectionProps) {
     <section id="invitation" className="content-narrow section">
       <SectionTitle eyebrow="Invitation" title="함께해 주세요" />
       <div className="intro-message">
-        {paragraphs.map((paragraph) => (
-          <p key={paragraph}>{paragraph}</p>
-        ))}
+        {paragraphs.map((paragraph) => {
+          const keptPhrase = showHosts
+            ? V2_KEEP_TOGETHER_PHRASES.find(({ source }) =>
+                paragraph.includes(source),
+              )
+            : undefined
+          const [prefix, suffix] = keptPhrase
+            ? paragraph.split(keptPhrase.source)
+            : [paragraph]
+
+          return (
+            <p key={paragraph}>
+              {keptPhrase && suffix !== undefined ? (
+                <>
+                  {prefix}
+                  <span className="intro-message__keep-together">
+                    {keptPhrase.text}
+                  </span>
+                  {suffix}
+                </>
+              ) : (
+                paragraph
+              )}
+            </p>
+          )
+        })}
       </div>
       {showHosts ? (
         <div className="intro-hosts" aria-label="양가 혼주 안내">
@@ -28,7 +62,10 @@ export function IntroSection({ showHosts = false }: IntroSectionProps) {
               ))}
             </span>
             <span className="intro-hosts__relation">
-              의 {invitation.hosts.groomSide.relation}
+              <span>의</span>
+              <span className="intro-hosts__relation-kind">
+                {invitation.hosts.groomSide.relation}
+              </span>
             </span>
             <strong className="intro-hosts__couple">
               {invitation.couple.groom}
@@ -44,7 +81,10 @@ export function IntroSection({ showHosts = false }: IntroSectionProps) {
               ))}
             </span>
             <span className="intro-hosts__relation">
-              의 {invitation.hosts.brideSide.relation}
+              <span>의</span>
+              <span className="intro-hosts__relation-kind">
+                {invitation.hosts.brideSide.relation}
+              </span>
             </span>
             <strong className="intro-hosts__couple">
               {invitation.couple.bride}
