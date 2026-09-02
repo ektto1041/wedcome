@@ -248,6 +248,47 @@
   white-space: pre-line;
 }
 
+.intro-hosts {
+  width: min(100%, 360px);
+  display: grid;
+  gap: var(--space-3);
+  margin: var(--space-8) auto 0;
+  padding-block-start: var(--space-6);
+  text-align: center;
+}
+
+.intro-hosts p {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  column-gap: 0.5em;
+  row-gap: 0.25em;
+  margin: 0;
+  font-size: clamp(0.9375rem, 4.2vw, 1.0625rem);
+  line-height: 1.65;
+}
+
+.intro-hosts__parents,
+.intro-hosts__parents > span,
+.intro-hosts__relation,
+.intro-hosts__couple {
+  white-space: nowrap;
+}
+
+.intro-hosts__relation {
+  color: var(--color-text-muted);
+}
+
+.intro-hosts strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.intro-hosts__couple {
+  letter-spacing: 0.06em;
+}
+
 .hero-section {
   position: relative;
   width: min(

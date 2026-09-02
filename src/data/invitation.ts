@@ -5,6 +5,16 @@ export const invitation = {
     groom: '상연',
     bride: '영진',
   },
+  hosts: {
+    groomSide: {
+      parents: ['박종철', '이영미'],
+      relation: '아들',
+    },
+    brideSide: {
+      parents: ['김건태', '김효정'],
+      relation: '딸',
+    },
+  },
   wedding: {
     dateLabel: `2026년 10월 3일 토요일
 오후 4시 30분`,
