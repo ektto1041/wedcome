@@ -252,8 +252,7 @@
   width: min(100%, 360px);
   display: grid;
   gap: var(--space-3);
-  margin: var(--space-8) auto 0;
-  padding-block-start: var(--space-6);
+  margin: var(--space-6) auto 0;
   text-align: center;
 }
 
