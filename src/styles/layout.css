@@ -257,13 +257,12 @@
 }
 
 .intro-hosts p {
-  display: flex;
-  flex-wrap: wrap;
+  width: fit-content;
+  display: grid;
+  grid-template-columns: 8.5em 3.5em 2.5em;
   align-items: baseline;
-  justify-content: center;
-  column-gap: 0.5em;
-  row-gap: 0.25em;
-  margin: 0;
+  column-gap: 0.4em;
+  margin: 0 auto;
   font-size: clamp(0.9375rem, 4.2vw, 1.0625rem);
   line-height: 1.65;
 }
@@ -277,6 +276,11 @@
 
 .intro-hosts__relation {
   color: var(--color-text-muted);
+  text-align: start;
+}
+
+.intro-hosts__parents {
+  text-align: end;
 }
 
 .intro-hosts strong {
@@ -286,6 +290,7 @@
 
 .intro-hosts__couple {
   letter-spacing: 0.06em;
+  text-align: start;
 }
 
 .hero-section {
