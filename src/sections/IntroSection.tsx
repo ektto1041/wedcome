@@ -1,11 +1,7 @@
 import { SectionTitle } from '../components/SectionTitle'
 import { invitation } from '../data/invitation'
 
-type IntroSectionProps = {
-  showHosts?: boolean
-}
-
-const V2_KEEP_TOGETHER_PHRASES = [
+const KEEP_TOGETHER_PHRASES = [
   {
     source: '알아본\n까닭이겠지요.',
     text: '알아본 까닭이겠지요.',
@@ -16,7 +12,7 @@ const V2_KEEP_TOGETHER_PHRASES = [
   },
 ] as const
 
-export function IntroSection({ showHosts = false }: IntroSectionProps) {
+export function IntroSection() {
   const paragraphs = invitation.message.split('\n\n')
 
   return (
@@ -24,11 +20,9 @@ export function IntroSection({ showHosts = false }: IntroSectionProps) {
       <SectionTitle eyebrow="Invitation" title="함께해 주세요" />
       <div className="intro-message">
         {paragraphs.map((paragraph) => {
-          const keptPhrase = showHosts
-            ? V2_KEEP_TOGETHER_PHRASES.find(({ source }) =>
-                paragraph.includes(source),
-              )
-            : undefined
+          const keptPhrase = KEEP_TOGETHER_PHRASES.find(({ source }) =>
+            paragraph.includes(source),
+          )
           const [prefix, suffix] = keptPhrase
             ? paragraph.split(keptPhrase.source)
             : [paragraph]
@@ -50,48 +44,46 @@ export function IntroSection({ showHosts = false }: IntroSectionProps) {
           )
         })}
       </div>
-      {showHosts ? (
-        <div className="intro-hosts" aria-label="양가 혼주 안내">
-          <p>
-            <span className="intro-hosts__parents">
-              {invitation.hosts.groomSide.parents.map((parent, index) => (
-                <span key={parent}>
-                  {index > 0 ? <span aria-hidden="true"> · </span> : null}
-                  <strong>{parent}</strong>
-                </span>
-              ))}
-            </span>
-            <span className="intro-hosts__relation">
-              <span>의</span>
-              <span className="intro-hosts__relation-kind">
-                {invitation.hosts.groomSide.relation}
+      <div className="intro-hosts" aria-label="양가 혼주 안내">
+        <p>
+          <span className="intro-hosts__parents">
+            {invitation.hosts.groomSide.parents.map((parent, index) => (
+              <span key={parent}>
+                {index > 0 ? <span aria-hidden="true"> · </span> : null}
+                <strong>{parent}</strong>
               </span>
+            ))}
+          </span>
+          <span className="intro-hosts__relation">
+            <span>의</span>
+            <span className="intro-hosts__relation-kind">
+              {invitation.hosts.groomSide.relation}
             </span>
-            <strong className="intro-hosts__couple">
-              {invitation.couple.groom}
-            </strong>
-          </p>
-          <p>
-            <span className="intro-hosts__parents">
-              {invitation.hosts.brideSide.parents.map((parent, index) => (
-                <span key={parent}>
-                  {index > 0 ? <span aria-hidden="true"> · </span> : null}
-                  <strong>{parent}</strong>
-                </span>
-              ))}
-            </span>
-            <span className="intro-hosts__relation">
-              <span>의</span>
-              <span className="intro-hosts__relation-kind">
-                {invitation.hosts.brideSide.relation}
+          </span>
+          <strong className="intro-hosts__couple">
+            {invitation.couple.groom}
+          </strong>
+        </p>
+        <p>
+          <span className="intro-hosts__parents">
+            {invitation.hosts.brideSide.parents.map((parent, index) => (
+              <span key={parent}>
+                {index > 0 ? <span aria-hidden="true"> · </span> : null}
+                <strong>{parent}</strong>
               </span>
+            ))}
+          </span>
+          <span className="intro-hosts__relation">
+            <span>의</span>
+            <span className="intro-hosts__relation-kind">
+              {invitation.hosts.brideSide.relation}
             </span>
-            <strong className="intro-hosts__couple">
-              {invitation.couple.bride}
-            </strong>
-          </p>
-        </div>
-      ) : null}
+          </span>
+          <strong className="intro-hosts__couple">
+            {invitation.couple.bride}
+          </strong>
+        </p>
+      </div>
     </section>
   )
 }

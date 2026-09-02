@@ -96,7 +96,7 @@ function App({ version }: AppProps) {
           ) : (
             <HeroSection isPlaybackEnabled={hasOpenedInvitation} />
           )}
-          <IntroSection showHosts={isV2} />
+          <IntroSection />
           <WeddingInfoSection />
           <ParkingSection />
           <MoneyGiftSection />
