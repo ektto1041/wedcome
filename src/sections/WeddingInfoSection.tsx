@@ -1,17 +1,44 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { NaverMap } from '../components/NaverMap'
 import { SectionTitle } from '../components/SectionTitle'
 import { TrainRouteDrawer } from '../components/TrainRouteDrawer'
 import { invitation } from '../data/invitation'
 import { trainRoutes } from '../data/trainRoutes'
 
-export function WeddingInfoSection() {
+type WeddingInfoSectionProps = {
+  onVisible?: () => void
+}
+
+export function WeddingInfoSection({ onVisible }: WeddingInfoSectionProps) {
   const [isTrainDrawerOpen, setIsTrainDrawerOpen] = useState(false)
+  const sectionRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    const section = sectionRef.current
+    if (!section || !onVisible) {
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          onVisible()
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.15 },
+    )
+
+    observer.observe(section)
+
+    return () => observer.disconnect()
+  }, [onVisible])
 
   return (
     <section
       id="wedding-info"
       className="content-narrow section wedding-info-section"
+      ref={sectionRef}
     >
       <SectionTitle eyebrow="Schedule" title="예식 안내" />
       <dl className="info-list">

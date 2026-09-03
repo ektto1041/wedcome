@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import loverThemeMusic from './assets/audio/lover-theme.mp3'
 import { ChapterNavigation } from './components/ChapterNavigation'
 import { ThemeSplash } from './components/ThemeSplash'
@@ -17,6 +17,7 @@ type AppProps = {
 }
 
 const MUSIC_CONTROL_STICK_DISTANCE_PX = 40
+const RSVP_AUTO_OPEN_DELAY_MS = 3000
 
 function App({ version }: AppProps) {
   const isV2 = version === 'v2'
@@ -24,10 +25,30 @@ function App({ version }: AppProps) {
   const [hasOpenedInvitation, setHasOpenedInvitation] = useState(false)
   const [isMusicPlaying, setIsMusicPlaying] = useState(false)
   const [isRsvpOpen, setIsRsvpOpen] = useState(false)
+  const [hasSeenWeddingInfo, setHasSeenWeddingInfo] = useState(false)
   const { retry: retryAssetLoad, status: assetLoadStatus } =
     useInvitationAssetPreload()
   const musicRef = useRef<HTMLAudioElement>(null)
   const musicControlRef = useRef<HTMLButtonElement>(null)
+  const hasOpenedRsvpRef = useRef(false)
+  const handleWeddingInfoVisible = useCallback(() => {
+    setHasSeenWeddingInfo(true)
+  }, [])
+
+  useEffect(() => {
+    if (!isV2 || !hasSeenWeddingInfo || hasOpenedRsvpRef.current) {
+      return
+    }
+
+    const timerId = window.setTimeout(() => {
+      if (!hasOpenedRsvpRef.current) {
+        hasOpenedRsvpRef.current = true
+        setIsRsvpOpen(true)
+      }
+    }, RSVP_AUTO_OPEN_DELAY_MS)
+
+    return () => window.clearTimeout(timerId)
+  }, [hasSeenWeddingInfo, isV2])
 
   useEffect(() => {
     let frameId: number | null = null
@@ -99,13 +120,16 @@ function App({ version }: AppProps) {
             <HeroSection isPlaybackEnabled={hasOpenedInvitation} />
           )}
           <IntroSection />
-          <WeddingInfoSection />
+          <WeddingInfoSection onVisible={handleWeddingInfoVisible} />
           <ParkingSection />
           {isV2 ? (
             <RsvpSection
               isOpen={isRsvpOpen}
               onClose={() => setIsRsvpOpen(false)}
-              onOpen={() => setIsRsvpOpen(true)}
+              onOpen={() => {
+                hasOpenedRsvpRef.current = true
+                setIsRsvpOpen(true)
+              }}
             />
           ) : null}
           <MoneyGiftSection />
