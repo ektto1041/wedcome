@@ -17,7 +17,7 @@ type AppProps = {
 }
 
 const MUSIC_CONTROL_STICK_DISTANCE_PX = 40
-const RSVP_AUTO_OPEN_DELAY_MS = 3000
+const RSVP_AUTO_OPEN_DELAY_MS = 2000
 
 function App({ version }: AppProps) {
   const isV2 = version === 'v2'
@@ -36,7 +36,7 @@ function App({ version }: AppProps) {
   }, [])
 
   useEffect(() => {
-    if (!isV2 || !hasSeenWeddingInfo || hasOpenedRsvpRef.current) {
+    if (!hasSeenWeddingInfo || hasOpenedRsvpRef.current) {
       return
     }
 
@@ -48,7 +48,7 @@ function App({ version }: AppProps) {
     }, RSVP_AUTO_OPEN_DELAY_MS)
 
     return () => window.clearTimeout(timerId)
-  }, [hasSeenWeddingInfo, isV2])
+  }, [hasSeenWeddingInfo])
 
   useEffect(() => {
     let frameId: number | null = null
@@ -122,19 +122,17 @@ function App({ version }: AppProps) {
           <IntroSection />
           <WeddingInfoSection onVisible={handleWeddingInfoVisible} />
           <ParkingSection />
-          {isV2 ? (
-            <RsvpSection
-              isOpen={isRsvpOpen}
-              onClose={() => setIsRsvpOpen(false)}
-              onOpen={() => {
-                hasOpenedRsvpRef.current = true
-                setIsRsvpOpen(true)
-              }}
-            />
-          ) : null}
+          <RsvpSection
+            isOpen={isRsvpOpen}
+            onClose={() => setIsRsvpOpen(false)}
+            onOpen={() => {
+              hasOpenedRsvpRef.current = true
+              setIsRsvpOpen(true)
+            }}
+          />
           <MoneyGiftSection />
         </div>
-        <ChapterNavigation showAttendance={isV2} />
+        <ChapterNavigation showAttendance />
       </main>
       {/* biome-ignore lint/a11y/useMediaCaption: 배경 연주곡에는 자막으로 옮길 음성이 없습니다. */}
       <audio
