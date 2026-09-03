@@ -121,7 +121,6 @@ function App({ version }: AppProps) {
           )}
           <IntroSection />
           <WeddingInfoSection onVisible={handleWeddingInfoVisible} />
-          <ParkingSection />
           <RsvpSection
             isOpen={isRsvpOpen}
             onClose={() => setIsRsvpOpen(false)}
@@ -130,6 +129,7 @@ function App({ version }: AppProps) {
               setIsRsvpOpen(true)
             }}
           />
+          <ParkingSection />
           <MoneyGiftSection />
         </div>
         <ChapterNavigation showAttendance />
