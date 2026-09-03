@@ -81,8 +81,10 @@ body {
   background-size: 256px 240px;
 }
 
+html.is-drawer-open,
 body.is-drawer-open {
   overflow: hidden;
+  overscroll-behavior: none;
 }
 
 body.is-gallery-open {

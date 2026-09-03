@@ -6,18 +6,32 @@ import {
   useState,
 } from 'react'
 
-const chapters = [
+const chaptersWithAttendance = [
   { id: 'home', label: '처음' },
   { id: 'invitation', label: '초대' },
   { id: 'wedding-info', label: '예식' },
   { id: 'parking', label: '주차' },
+  { id: 'rsvp', label: '참석' },
   { id: 'gift', label: '마음' },
 ] as const
 
-type ChapterId = (typeof chapters)[number]['id']
+const chaptersWithoutAttendance = chaptersWithAttendance.filter(
+  (chapter) => chapter.id !== 'rsvp',
+)
+
+type ChapterId = (typeof chaptersWithAttendance)[number]['id']
+type ChapterNavigationProps = {
+  showAttendance?: boolean
+}
+
 const NAVIGATION_IDLE_DELAY = 1400
 
-export function ChapterNavigation() {
+export function ChapterNavigation({
+  showAttendance = false,
+}: ChapterNavigationProps) {
+  const chapters = showAttendance
+    ? chaptersWithAttendance
+    : chaptersWithoutAttendance
   const [activeChapterId, setActiveChapterId] = useState<ChapterId>(
     chapters[0].id,
   )
@@ -107,7 +121,7 @@ export function ChapterNavigation() {
         positionFrameRef.current = null
       }
     }
-  }, [])
+  }, [chapters])
 
   useEffect(() => {
     const handleScroll = () => showNavigation()
@@ -149,7 +163,7 @@ export function ChapterNavigation() {
   return (
     <nav
       ref={navigationRef}
-      className={`chapter-navigation ${
+      className={`chapter-navigation ${showAttendance ? 'has-attendance' : ''} ${
         isExpanded ? 'is-expanded' : 'is-collapsed'
       }`}
       aria-label="청첩장 챕터 바로가기"

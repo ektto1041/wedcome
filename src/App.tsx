@@ -7,6 +7,7 @@ import { HeroImageSection, HeroSection } from './sections/HeroSection'
 import { IntroSection } from './sections/IntroSection'
 import { MoneyGiftSection } from './sections/MoneyGiftSection'
 import { ParkingSection } from './sections/ParkingSection'
+import { RsvpSection } from './sections/RsvpSection'
 import { WeddingInfoSection } from './sections/WeddingInfoSection'
 
 export type InvitationVersion = 'default' | 'v2'
@@ -22,6 +23,7 @@ function App({ version }: AppProps) {
   const [isSplashVisible, setIsSplashVisible] = useState(true)
   const [hasOpenedInvitation, setHasOpenedInvitation] = useState(false)
   const [isMusicPlaying, setIsMusicPlaying] = useState(false)
+  const [isRsvpOpen, setIsRsvpOpen] = useState(false)
   const { retry: retryAssetLoad, status: assetLoadStatus } =
     useInvitationAssetPreload()
   const musicRef = useRef<HTMLAudioElement>(null)
@@ -99,9 +101,16 @@ function App({ version }: AppProps) {
           <IntroSection />
           <WeddingInfoSection />
           <ParkingSection />
+          {isV2 ? (
+            <RsvpSection
+              isOpen={isRsvpOpen}
+              onClose={() => setIsRsvpOpen(false)}
+              onOpen={() => setIsRsvpOpen(true)}
+            />
+          ) : null}
           <MoneyGiftSection />
         </div>
-        <ChapterNavigation />
+        <ChapterNavigation showAttendance={isV2} />
       </main>
       {/* biome-ignore lint/a11y/useMediaCaption: 배경 연주곡에는 자막으로 옮길 음성이 없습니다. */}
       <audio

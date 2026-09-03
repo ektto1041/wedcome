@@ -23,3 +23,11 @@ createRoot(rootElement).render(
     <App version={version} />
   </StrictMode>,
 )
+
+if (import.meta.env.PROD && version === 'v2') {
+  window.setTimeout(() => {
+    void import('./lib/firebaseAnalytics')
+      .then(({ initializeFirebaseAnalytics }) => initializeFirebaseAnalytics())
+      .catch(() => undefined)
+  }, 0)
+}

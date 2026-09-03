@@ -1,0 +1,50 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /rsvps/{rsvpId} {
+      allow create: if
+        request.resource.data.keys().hasAll([
+          'attendance',
+          'consentVersion',
+          'createdAt',
+          'guestCount',
+          'guestName',
+          'message',
+          'side'
+        ]) &&
+        request.resource.data.keys().hasOnly([
+          'attendance',
+          'consentVersion',
+          'createdAt',
+          'guestCount',
+          'guestName',
+          'message',
+          'side'
+        ]) &&
+        request.resource.data.attendance in ['attending', 'not-attending'] &&
+        request.resource.data.consentVersion == '2026-09-03' &&
+        request.resource.data.createdAt == request.time &&
+        request.resource.data.guestCount is int &&
+        (
+          (
+            request.resource.data.attendance == 'attending' &&
+            request.resource.data.guestCount >= 1 &&
+            request.resource.data.guestCount <= 10
+          ) ||
+          (
+            request.resource.data.attendance == 'not-attending' &&
+            request.resource.data.guestCount == 0
+          )
+        ) &&
+        request.resource.data.guestName is string &&
+        request.resource.data.guestName.size() >= 1 &&
+        request.resource.data.guestName.size() <= 30 &&
+        request.resource.data.message is string &&
+        request.resource.data.message.size() <= 300 &&
+        request.resource.data.side in ['groom', 'bride'];
+
+      allow read, update, delete: if false;
+    }
+  }
+}
