@@ -912,7 +912,7 @@
 .drawer-layer {
   position: fixed;
   inset: 0;
-  z-index: 20;
+  z-index: 1000;
 }
 
 .drawer-backdrop {
@@ -953,6 +953,15 @@
   backdrop-filter: blur(24px) saturate(1.16);
   -webkit-backdrop-filter: blur(24px) saturate(1.16);
   animation: drawer-slide-in 280ms cubic-bezier(0.2, 0.82, 0.2, 1) both;
+}
+
+.rsvp-drawer-layer.is-opening .drawer-backdrop {
+  animation-duration: 400ms;
+}
+
+.rsvp-drawer-layer.is-opening .bottom-sheet {
+  animation-duration: 520ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .drawer-layer.is-closing .bottom-sheet {

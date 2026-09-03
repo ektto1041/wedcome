@@ -84,6 +84,7 @@ export function RsvpSection({ isOpen, onClose, onOpen }: RsvpSectionProps) {
         contentClassName="rsvp-drawer__content"
         eyebrow="Attendance"
         isOpen={isOpen}
+        layerClassName="rsvp-drawer-layer"
         onClose={onClose}
         title="참석 여부 전달"
       >

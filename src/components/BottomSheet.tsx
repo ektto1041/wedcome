@@ -13,6 +13,7 @@ type BottomSheetProps = {
   contentClassName?: string
   eyebrow?: string
   isOpen: boolean
+  layerClassName?: string
   onClose: () => void
   title: string
 }
@@ -33,6 +34,7 @@ export function BottomSheet({
   contentClassName = '',
   eyebrow,
   isOpen,
+  layerClassName = '',
   onClose,
   title,
 }: BottomSheetProps) {
@@ -141,7 +143,9 @@ export function BottomSheet({
   }
 
   return (
-    <div className={`drawer-layer ${isClosing ? 'is-closing' : 'is-opening'}`}>
+    <div
+      className={`drawer-layer ${layerClassName} ${isClosing ? 'is-closing' : 'is-opening'}`.trim()}
+    >
       <button
         className="drawer-backdrop"
         type="button"
