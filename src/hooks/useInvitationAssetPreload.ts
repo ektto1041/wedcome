@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import loverThemeMusic from '../assets/audio/lover-theme.mp3'
+import backgroundMusic from '../assets/audio/L-O-V-E.mp3'
 import brideProfileImage from '../assets/images/bride-profile.jpg'
 import groomProfileImage from '../assets/images/groom-profile.jpg'
 import heroImage from '../assets/images/hero-image.jpg'
@@ -35,7 +35,7 @@ const invitationAssetUrls = [
   secondStoryVideo,
   thirdStoryVideo,
   fourthStoryVideo,
-  loverThemeMusic,
+  backgroundMusic,
 ]
 
 let invitationAssetLoadPromise: Promise<void> | null = null

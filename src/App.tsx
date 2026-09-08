@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import loverThemeMusic from './assets/audio/lover-theme.mp3'
+import backgroundMusic from './assets/audio/L-O-V-E.mp3'
 import { ChapterNavigation } from './components/ChapterNavigation'
 import { ThemeSplash } from './components/ThemeSplash'
 import { useInvitationAssetPreload } from './hooks/useInvitationAssetPreload'
@@ -134,14 +134,14 @@ function App({ version }: AppProps) {
         </div>
         <ChapterNavigation showAttendance />
       </main>
-      {/* biome-ignore lint/a11y/useMediaCaption: 배경 연주곡에는 자막으로 옮길 음성이 없습니다. */}
+      {/* biome-ignore lint/a11y/useMediaCaption: 배경음악은 청첩장 정보를 전달하지 않는 선택적 오디오입니다. */}
       <audio
         loop
         onPause={() => setIsMusicPlaying(false)}
         onPlay={() => setIsMusicPlaying(true)}
         preload="auto"
         ref={musicRef}
-        src={loverThemeMusic}
+        src={backgroundMusic}
       />
       <button
         aria-label={isMusicPlaying ? '음악 끄기' : '음악 켜기'}
