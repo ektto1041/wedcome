@@ -23,6 +23,7 @@ const videoModules = import.meta.glob<string>(
     '../assets/videos/*.{mp4,webm,m4v}',
     '!../assets/videos/video4.{mp4,webm,m4v}',
     '!../assets/videos/video5.{mp4,webm,m4v}',
+    '!../assets/videos/video6.{mp4,webm,m4v}',
   ],
   {
     eager: true,

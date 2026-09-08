@@ -3,6 +3,7 @@ import backgroundMusic from './assets/audio/L-O-V-E.mp3'
 import { ChapterNavigation } from './components/ChapterNavigation'
 import { ThemeSplash } from './components/ThemeSplash'
 import { useInvitationAssetPreload } from './hooks/useInvitationAssetPreload'
+import { DressCodeSection } from './sections/DressCodeSection'
 import { HeroImageSection, HeroSection } from './sections/HeroSection'
 import { IntroSection } from './sections/IntroSection'
 import { MoneyGiftSection } from './sections/MoneyGiftSection'
@@ -121,6 +122,7 @@ function App({ version }: AppProps) {
           )}
           <IntroSection />
           <WeddingInfoSection onVisible={handleWeddingInfoVisible} />
+          {isV2 ? <DressCodeSection /> : null}
           <RsvpSection
             isOpen={isRsvpOpen}
             onClose={() => setIsRsvpOpen(false)}

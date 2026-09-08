@@ -13,7 +13,6 @@ import splashImage from '../assets/images/wedding-card-splash-optimized.jpg'
 import firstStoryVideo from '../assets/videos/video1.mp4'
 import secondStoryVideo from '../assets/videos/video2.mp4'
 import thirdStoryVideo from '../assets/videos/video3.mp4'
-import fourthStoryVideo from '../assets/videos/video6.mp4'
 
 export type InvitationAssetStatus = 'loading' | 'ready' | 'error'
 
@@ -34,7 +33,6 @@ const invitationAssetUrls = [
   firstStoryVideo,
   secondStoryVideo,
   thirdStoryVideo,
-  fourthStoryVideo,
   backgroundMusic,
 ]
 

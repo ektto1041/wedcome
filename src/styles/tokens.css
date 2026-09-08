@@ -7,6 +7,12 @@
   --color-line: rgba(120, 102, 94, 0.18);
   --color-accent: #9f5f4c;
   --color-accent-soft: rgba(159, 95, 76, 0.12);
+  --dress-code-sand: #d8c6ac;
+  --dress-code-beige: #cbb18e;
+  --dress-code-camel: #b99169;
+  --dress-code-mocha: #84674f;
+  --dress-code-brown: #514033;
+  --dress-code-accent: #967756;
   --page-background-start: #fffdfb;
   --page-background-end: #f7f3f1;
   --page-glow-start: rgba(255, 226, 214, 0.42);
