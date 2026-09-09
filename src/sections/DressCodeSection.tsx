@@ -102,13 +102,6 @@ export function DressCodeSection() {
         eyebrow="Dress Code"
         title="함께 물들여 주세요"
         titleId="dress-code-title"
-        description={
-          <>
-            베이지부터 브라운까지,
-            <br />
-            따뜻한 색으로 함께해 주세요.
-          </>
-        }
       />
       <div className="wedding-dress-code__palette" aria-hidden="true">
         <span />
