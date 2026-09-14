@@ -121,7 +121,7 @@ function App({ version }: AppProps) {
             <HeroSection isPlaybackEnabled={hasOpenedInvitation} />
           )}
           <IntroSection />
-          {isV2 ? <DressCodeSection /> : null}
+          <DressCodeSection />
           <WeddingInfoSection onVisible={handleWeddingInfoVisible} />
           <RsvpSection
             isOpen={isRsvpOpen}
