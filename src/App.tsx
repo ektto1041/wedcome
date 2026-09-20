@@ -18,6 +18,7 @@ type AppProps = {
 }
 
 const MUSIC_CONTROL_STICK_DISTANCE_PX = 40
+const RSVP_AUTO_OPEN_ENABLED = false
 const RSVP_AUTO_OPEN_DELAY_MS = 2000
 
 function App({ version }: AppProps) {
@@ -37,7 +38,11 @@ function App({ version }: AppProps) {
   }, [])
 
   useEffect(() => {
-    if (!hasSeenWeddingInfo || hasOpenedRsvpRef.current) {
+    if (
+      !RSVP_AUTO_OPEN_ENABLED ||
+      !hasSeenWeddingInfo ||
+      hasOpenedRsvpRef.current
+    ) {
       return
     }
 
