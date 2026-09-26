@@ -3,10 +3,7 @@ import backgroundMusic from '../assets/audio/L-O-V-E.mp3'
 import brideProfileImage from '../assets/images/bride-profile.jpg'
 import groomProfileImage from '../assets/images/groom-profile.jpg'
 import heroImage from '../assets/images/hero-image.jpg'
-import firstStoryImage from '../assets/images/hero-story-1.jpg'
-import fifthStoryImage from '../assets/images/hero-story-5.jpg'
-import seventhStoryImage from '../assets/images/hero-story-7.jpg'
-import ninthStoryImage from '../assets/images/hero-story-9.jpg'
+import firstStoryImage from '../assets/images/hero-photo-02.jpg'
 import paperTexture from '../assets/images/paper-texture.jpg'
 import parkingMap from '../assets/images/parking-map-aerial-annotated.webp'
 import splashImage from '../assets/images/wedding-card-splash-optimized.jpg'
@@ -26,9 +23,6 @@ const invitationAssetUrls = [
   brideProfileImage,
   groomProfileImage,
   firstStoryImage,
-  fifthStoryImage,
-  seventhStoryImage,
-  ninthStoryImage,
   parkingMap,
   firstStoryVideo,
   secondStoryVideo,

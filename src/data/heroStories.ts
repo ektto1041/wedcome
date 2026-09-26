@@ -1,7 +1,15 @@
-import firstStoryImage from '../assets/images/hero-story-1.jpg'
-import fifthStoryImage from '../assets/images/hero-story-5.jpg'
-import seventhStoryImage from '../assets/images/hero-story-7.jpg'
-import ninthStoryImage from '../assets/images/hero-story-9.jpg'
+import firstPhoto from '../assets/images/hero-photo-01.jpg'
+import secondPhoto from '../assets/images/hero-photo-02.jpg'
+import thirdPhoto from '../assets/images/hero-photo-03.jpg'
+import fourthPhoto from '../assets/images/hero-photo-04.jpg'
+import fifthPhoto from '../assets/images/hero-photo-05.jpg'
+import sixthPhoto from '../assets/images/hero-photo-06.jpg'
+import seventhPhoto from '../assets/images/hero-photo-07.jpg'
+import eighthPhoto from '../assets/images/hero-photo-08.jpg'
+import ninthPhoto from '../assets/images/hero-photo-09.jpg'
+import tenthPhoto from '../assets/images/hero-photo-10.jpg'
+import eleventhPhoto from '../assets/images/hero-photo-11.jpg'
+import twelfthPhoto from '../assets/images/hero-photo-12.jpg'
 
 type HeroStoryBase = {
   id: string
@@ -50,37 +58,34 @@ const [
   ...remainingVideoStories
 ] = videoStories
 
+const photoStories: HeroStory[] = [
+  secondPhoto,
+  fifthPhoto,
+  eighthPhoto,
+  seventhPhoto,
+  thirdPhoto,
+  eleventhPhoto,
+  twelfthPhoto,
+  tenthPhoto,
+  sixthPhoto,
+  fourthPhoto,
+  firstPhoto,
+  ninthPhoto,
+].map((src, index) => ({
+  id: `hero-photo-${index + 1}`,
+  src,
+  label: `신랑과 신부의 웨딩 사진 ${index + 1}`,
+  type: 'image',
+  durationMs: 3000,
+}))
+
 export const heroStories: HeroStory[] = [
-  {
-    id: 'hero-story-image-1',
-    src: firstStoryImage,
-    label: '함께 앉아 있는 신랑과 신부',
-    type: 'image',
-    durationMs: 3000,
-  },
+  ...photoStories.slice(0, 3),
   ...(firstVideoStory ? [firstVideoStory] : []),
-  {
-    id: 'hero-story-image-5',
-    src: fifthStoryImage,
-    label: '함께 앉아 서로를 바라보는 신랑과 신부',
-    type: 'image',
-    durationMs: 3000,
-  },
+  ...photoStories.slice(3, 6),
   ...(secondVideoStory ? [secondVideoStory] : []),
-  {
-    id: 'hero-story-image-7',
-    src: seventhStoryImage,
-    label: '나란히 서 있는 신랑과 신부',
-    type: 'image',
-    durationMs: 3000,
-  },
+  ...photoStories.slice(6, 9),
   ...(thirdVideoStory ? [thirdVideoStory] : []),
-  {
-    id: 'hero-story-image-9',
-    src: ninthStoryImage,
-    label: '침대에 앉아 서로를 바라보는 신랑과 신부',
-    type: 'image',
-    durationMs: 3000,
-  },
+  ...photoStories.slice(9),
   ...remainingVideoStories,
 ]
