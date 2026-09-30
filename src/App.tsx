@@ -12,7 +12,7 @@ import { RsvpSection } from './sections/RsvpSection'
 import { SchedulePage } from './sections/SchedulePage'
 import { WeddingInfoSection } from './sections/WeddingInfoSection'
 
-export type InvitationVersion = 'default' | 'v2' | 'v3'
+export type InvitationVersion = 'default' | 'v2'
 
 type AppProps = {
   version: InvitationVersion
@@ -24,10 +24,10 @@ const RSVP_AUTO_OPEN_DELAY_MS = 2000
 
 function App({ version }: AppProps) {
   const isV2 = version === 'v2'
-  const isV3 = version === 'v3'
+  const isMainVersion = version === 'default'
   const [isScheduleView, setIsScheduleView] = useState(
     () =>
-      isV3 &&
+      isMainVersion &&
       new URLSearchParams(window.location.search).get('view') === 'schedule',
   )
   const [isSplashVisible, setIsSplashVisible] = useState(true)
@@ -48,10 +48,11 @@ function App({ version }: AppProps) {
     const url = new URL(window.location.href)
 
     if (view === 'schedule') {
-      url.searchParams.set('version', 'v3')
+      url.searchParams.delete('version')
       url.searchParams.set('view', 'schedule')
       window.history.pushState(null, '', url)
     } else {
+      url.searchParams.delete('version')
       url.searchParams.delete('view')
       window.history.replaceState(null, '', url)
     }
@@ -63,13 +64,13 @@ function App({ version }: AppProps) {
   useEffect(() => {
     const handlePopState = () => {
       const params = new URLSearchParams(window.location.search)
-      setIsScheduleView(isV3 && params.get('view') === 'schedule')
+      setIsScheduleView(isMainVersion && params.get('view') === 'schedule')
       window.scrollTo({ top: 0, behavior: 'auto' })
     }
 
     window.addEventListener('popstate', handlePopState)
     return () => window.removeEventListener('popstate', handlePopState)
-  }, [isV3])
+  }, [isMainVersion])
 
   useEffect(() => {
     if (
@@ -153,7 +154,9 @@ function App({ version }: AppProps) {
           assetLoadStatus={assetLoadStatus}
           onComplete={() => setIsSplashVisible(false)}
           onOpen={() => setHasOpenedInvitation(true)}
-          onOpenSchedule={isV3 ? () => navigateToView('schedule') : undefined}
+          onOpenSchedule={
+            isMainVersion ? () => navigateToView('schedule') : undefined
+          }
           onRetry={retryAssetLoad}
         />
       ) : null}
@@ -179,13 +182,12 @@ function App({ version }: AppProps) {
           <MoneyGiftSection />
         </div>
         <ChapterNavigation showAttendance />
-        {isV3 ? (
+        {isMainVersion ? (
           <button
             className="schedule-floating-button"
             onClick={() => navigateToView('schedule')}
             type="button"
           >
-            <span aria-hidden="true">☷</span>
             식순 확인
           </button>
         ) : null}

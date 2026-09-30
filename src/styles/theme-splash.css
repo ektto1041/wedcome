@@ -52,7 +52,8 @@
 }
 
 .theme-splash__title,
-.theme-splash__prompt {
+.theme-splash__prompt,
+.theme-splash__schedule {
   position: absolute;
   z-index: 1;
   inset-inline: max(24px, env(safe-area-inset-left));
@@ -60,54 +61,9 @@
   text-wrap: balance;
 }
 
+.theme-splash__prompt,
 .theme-splash__schedule {
-  position: absolute;
   z-index: 3;
-  inset-inline-end: max(18px, env(safe-area-inset-right));
-  inset-block-end: max(24px, calc(env(safe-area-inset-bottom) + 18px));
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 10px 16px;
-  border: 1px solid rgba(81, 71, 64, 0.2);
-  border-radius: 999px;
-  color: #514740;
-  background: rgba(255, 253, 248, 0.82);
-  box-shadow: 0 10px 30px rgba(81, 71, 64, 0.14);
-  font-family: inherit;
-  font-size: 0.84rem;
-  font-weight: 700;
-  cursor: pointer;
-  backdrop-filter: blur(8px);
-  animation: splash-prompt-in 500ms ease-out 1100ms both;
-}
-
-.theme-splash__schedule span {
-  font-size: 1.05rem;
-  line-height: 1;
-}
-
-.theme-splash__schedule:focus-visible {
-  outline: 2px solid rgba(81, 71, 64, 0.55);
-  outline-offset: 3px;
-}
-
-.theme-splash__title {
-  pointer-events: none;
-  animation: splash-content-in 500ms ease-out both;
-}
-
-.theme-splash__title {
-  inset-block-start: max(10vh, calc(env(safe-area-inset-top) + 40px));
-  font-size: clamp(1.55rem, 7vw, 2.15rem);
-  font-weight: 400;
-  letter-spacing: 0.08em;
-}
-
-.theme-splash__prompt {
-  z-index: 3;
-  inset-block-end: max(18vh, calc(env(safe-area-inset-bottom) + 112px));
   inset-inline: auto;
   inset-inline-start: 50%;
   width: clamp(210px, 58vw, 320px);
@@ -128,12 +84,34 @@
   transform: translateX(-50%);
   backdrop-filter: blur(4px);
   -webkit-tap-highlight-color: transparent;
+}
+
+.theme-splash__prompt:focus-visible,
+.theme-splash__schedule:focus-visible {
+  outline: 2px solid rgba(81, 71, 64, 0.55);
+  outline-offset: 3px;
+}
+
+.theme-splash__schedule {
+  inset-block-end: max(10vh, calc(env(safe-area-inset-bottom) + 50px));
   animation: splash-prompt-in 500ms ease-out 1000ms both;
 }
 
-.theme-splash__prompt:focus-visible {
-  outline: 2px solid rgba(81, 71, 64, 0.55);
-  outline-offset: 3px;
+.theme-splash__title {
+  pointer-events: none;
+  animation: splash-content-in 500ms ease-out both;
+}
+
+.theme-splash__title {
+  inset-block-start: max(10vh, calc(env(safe-area-inset-top) + 40px));
+  font-size: clamp(1.55rem, 7vw, 2.15rem);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+}
+
+.theme-splash__prompt {
+  inset-block-end: max(18vh, calc(env(safe-area-inset-bottom) + 112px));
+  animation: splash-prompt-in 500ms ease-out 1000ms both;
 }
 
 .theme-splash__prompt:disabled {
@@ -160,7 +138,8 @@
   display: inline-block;
 }
 
-.theme-splash__prompt.is-ready .theme-splash__prompt-text {
+.theme-splash__prompt.is-ready .theme-splash__prompt-text,
+.theme-splash__schedule .theme-splash__prompt-text {
   animation:
     splash-prompt-ready-in 400ms ease-out both,
     splash-prompt-pulse 2400ms ease-in-out 400ms infinite;
@@ -290,7 +269,6 @@
   .theme-splash__image,
   .theme-splash__title,
   .theme-splash__prompt,
-  .theme-splash__schedule,
   .theme-splash__prompt-text,
   .theme-splash__spinner {
     animation: none;

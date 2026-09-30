@@ -111,8 +111,7 @@ export function ThemeSplash({
           }}
           type="button"
         >
-          <span aria-hidden="true">☷</span>
-          식순 확인
+          <span className="theme-splash__prompt-text">식순 확인하기</span>
         </button>
       ) : null}
     </section>

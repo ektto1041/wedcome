@@ -20,10 +20,6 @@ export function SchedulePage({ onBack }: SchedulePageProps) {
           </button>
           <p>Wedding Program</p>
           <h1>예식 식순</h1>
-          <div className="schedule-page__wedding-info">
-            <span>{invitation.wedding.dateLabel.replace('\n', ' · ')}</span>
-            <span>{invitation.wedding.venueName}</span>
-          </div>
         </header>
 
         <ol className="schedule-list">
@@ -39,7 +35,6 @@ export function SchedulePage({ onBack }: SchedulePageProps) {
         </ol>
 
         <footer className="schedule-page__footer">
-          <p>예식 진행 상황에 따라 순서가 일부 변경될 수 있습니다.</p>
           <button type="button" onClick={onBack}>
             청첩장으로 돌아가기
           </button>

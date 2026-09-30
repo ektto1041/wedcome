@@ -245,16 +245,19 @@
   border-radius: 999px;
   color: #fffaf6;
   background: var(--color-text);
-  box-shadow: 0 12px 32px rgba(43, 33, 29, 0.22);
+  box-shadow:
+    0 9px 20px rgba(30, 21, 17, 0.32),
+    0 5px 14px rgba(159, 95, 76, 0.16);
   font: inherit;
   font-size: 0.84rem;
   font-weight: 700;
   cursor: pointer;
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
 }
 
-.schedule-floating-button span {
-  font-size: 1.05rem;
-  line-height: 1;
+.chapter-navigation.is-collapsed + .schedule-floating-button {
+  transform: translateY(60px);
 }
 
 .schedule-floating-button:focus-visible {
@@ -318,14 +321,6 @@
   line-height: 1.1;
 }
 
-.schedule-page__wedding-info {
-  display: grid;
-  gap: 4px;
-  margin-block-start: var(--space-5);
-  color: var(--color-text-muted);
-  font-size: 0.9rem;
-}
-
 .schedule-list {
   margin: 0;
   padding: var(--space-6) 0;
@@ -383,12 +378,6 @@
   text-align: center;
 }
 
-.schedule-page__footer p {
-  margin: 0;
-  color: var(--color-text-muted);
-  font-size: 0.83rem;
-}
-
 .schedule-page__footer button {
   width: min(100%, 360px);
   min-height: 50px;
@@ -420,7 +409,8 @@
   .chapter-navigation__compact,
   .chapter-navigation__track span,
   .chapter-navigation__indicator,
-  .chapter-navigation a {
+  .chapter-navigation a,
+  .schedule-floating-button {
     transition: none;
   }
 }
