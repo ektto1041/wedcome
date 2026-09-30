@@ -28,6 +28,18 @@ export const invitation = {
       lng: 128.7683522,
     },
   },
+  schedule: [
+    { id: 'opening', title: '개식 선언' },
+    { id: 'candles', title: '양가 어머님 화촉 점화' },
+    { id: 'groom-entrance', title: '신랑 입장' },
+    { id: 'bride-entrance', title: '신부 입장' },
+    { id: 'greeting', title: '신랑 · 신부 맞절' },
+    { id: 'vows', title: '혼인 서약' },
+    { id: 'declaration', title: '성혼 선언' },
+    { id: 'congratulations', title: '축사 및 축가' },
+    { id: 'march', title: '신랑 · 신부 행진' },
+    { id: 'photos', title: '기념 촬영' },
+  ],
   transportation: {
     trainBookingUrl: 'https://www.korail.com/ticket/search/general',
     trainRoutes: [

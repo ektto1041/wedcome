@@ -6,7 +6,11 @@ import './styles/global.css'
 function getInvitationVersion(search: string): InvitationVersion {
   const version = new URLSearchParams(search).get('version')
 
-  return version === 'v2' ? 'v2' : 'default'
+  if (version === 'v2' || version === 'v3') {
+    return version
+  }
+
+  return 'default'
 }
 
 const rootElement = document.getElementById('root')

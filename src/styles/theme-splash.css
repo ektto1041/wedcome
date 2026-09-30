@@ -60,6 +60,39 @@
   text-wrap: balance;
 }
 
+.theme-splash__schedule {
+  position: absolute;
+  z-index: 3;
+  inset-inline-end: max(18px, env(safe-area-inset-right));
+  inset-block-end: max(24px, calc(env(safe-area-inset-bottom) + 18px));
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 16px;
+  border: 1px solid rgba(81, 71, 64, 0.2);
+  border-radius: 999px;
+  color: #514740;
+  background: rgba(255, 253, 248, 0.82);
+  box-shadow: 0 10px 30px rgba(81, 71, 64, 0.14);
+  font-family: inherit;
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  animation: splash-prompt-in 500ms ease-out 1100ms both;
+}
+
+.theme-splash__schedule span {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+.theme-splash__schedule:focus-visible {
+  outline: 2px solid rgba(81, 71, 64, 0.55);
+  outline-offset: 3px;
+}
+
 .theme-splash__title {
   pointer-events: none;
   animation: splash-content-in 500ms ease-out both;
@@ -152,10 +185,7 @@
 .music-control {
   position: fixed;
   inset-block-start: calc(env(safe-area-inset-top) + 27px);
-  inset-inline-end: max(
-    14px,
-    calc((100vw - var(--container-max)) / 2 + 14px)
-  );
+  inset-inline-end: max(14px, calc((100vw - var(--container-max)) / 2 + 14px));
   z-index: 20;
   width: 32px;
   height: 32px;
@@ -260,6 +290,7 @@
   .theme-splash__image,
   .theme-splash__title,
   .theme-splash__prompt,
+  .theme-splash__schedule,
   .theme-splash__prompt-text,
   .theme-splash__spinner {
     animation: none;

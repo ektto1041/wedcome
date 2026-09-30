@@ -7,6 +7,7 @@ type ThemeSplashProps = {
   assetLoadStatus: InvitationAssetStatus
   onComplete: () => void
   onOpen: () => void
+  onOpenSchedule?: () => void
   onRetry: () => void
 }
 
@@ -16,6 +17,7 @@ export function ThemeSplash({
   assetLoadStatus,
   onComplete,
   onOpen,
+  onOpenSchedule,
   onRetry,
 }: ThemeSplashProps) {
   const [isLeaving, setIsLeaving] = useState(false)
@@ -99,6 +101,20 @@ export function ThemeSplash({
           </span>
         )}
       </button>
+
+      {onOpenSchedule ? (
+        <button
+          className="theme-splash__schedule"
+          onClick={(event) => {
+            event.stopPropagation()
+            onOpenSchedule()
+          }}
+          type="button"
+        >
+          <span aria-hidden="true">☷</span>
+          식순 확인
+        </button>
+      ) : null}
     </section>
   )
 }

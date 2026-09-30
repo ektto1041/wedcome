@@ -231,6 +231,183 @@
   color: var(--color-text);
 }
 
+.schedule-floating-button {
+  position: fixed;
+  inset-inline-end: max(14px, calc((100vw - var(--container-max)) / 2 + 14px));
+  inset-block-end: calc(72px + env(safe-area-inset-bottom));
+  z-index: 9;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 15px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  color: #fffaf6;
+  background: var(--color-text);
+  box-shadow: 0 12px 32px rgba(43, 33, 29, 0.22);
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.schedule-floating-button span {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+.schedule-floating-button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.schedule-page {
+  min-height: 100dvh;
+  padding: max(24px, env(safe-area-inset-top)) var(--page-padding)
+    max(40px, calc(env(safe-area-inset-bottom) + 24px));
+}
+
+.schedule-page__container {
+  width: 100%;
+  max-width: var(--content-narrow-max);
+  margin-inline: auto;
+}
+
+.schedule-page__header {
+  display: grid;
+  justify-items: center;
+  padding-block: var(--space-4) var(--space-10);
+  text-align: center;
+}
+
+.schedule-page__back {
+  justify-self: start;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 2px;
+  border: 0;
+  color: var(--color-text-muted);
+  background: transparent;
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.schedule-page__back span {
+  color: var(--color-accent);
+  font-size: 1.25rem;
+}
+
+.schedule-page__header > p {
+  margin: var(--space-10) 0 var(--space-3);
+  color: var(--color-accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.schedule-page__header h1 {
+  margin: 0;
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: clamp(2.35rem, 10vw, 3.4rem);
+  line-height: 1.1;
+}
+
+.schedule-page__wedding-info {
+  display: grid;
+  gap: 4px;
+  margin-block-start: var(--space-5);
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.schedule-list {
+  margin: 0;
+  padding: var(--space-6) 0;
+  border-block: 1px solid var(--color-line);
+  list-style: none;
+}
+
+.schedule-list li {
+  position: relative;
+  min-height: 64px;
+  display: grid;
+  grid-template-columns: 38px 20px minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.schedule-list li:not(:last-child)::after {
+  position: absolute;
+  inset-block-start: calc(50% + 5px);
+  inset-block-end: calc(-50% + 5px);
+  inset-inline-start: 60px;
+  width: 1px;
+  background: var(--color-line);
+  content: "";
+}
+
+.schedule-list__number {
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-align: end;
+}
+
+.schedule-list__marker {
+  z-index: 1;
+  width: 9px;
+  height: 9px;
+  justify-self: center;
+  border: 2px solid var(--color-accent);
+  border-radius: 50%;
+  background: #f7f4ed;
+}
+
+.schedule-list strong {
+  color: var(--color-text);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.schedule-page__footer {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-6);
+  padding-block-start: var(--space-10);
+  text-align: center;
+}
+
+.schedule-page__footer p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.83rem;
+}
+
+.schedule-page__footer button {
+  width: min(100%, 360px);
+  min-height: 50px;
+  padding-inline: var(--space-6);
+  border: 0;
+  border-radius: 999px;
+  color: #fffaf6;
+  background: var(--color-text);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.schedule-page__back:focus-visible,
+.schedule-page__footer button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .section-title--reveal {
     opacity: 1;

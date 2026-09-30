@@ -9,9 +9,10 @@ import { IntroSection } from './sections/IntroSection'
 import { MoneyGiftSection } from './sections/MoneyGiftSection'
 import { ParkingSection } from './sections/ParkingSection'
 import { RsvpSection } from './sections/RsvpSection'
+import { SchedulePage } from './sections/SchedulePage'
 import { WeddingInfoSection } from './sections/WeddingInfoSection'
 
-export type InvitationVersion = 'default' | 'v2'
+export type InvitationVersion = 'default' | 'v2' | 'v3'
 
 type AppProps = {
   version: InvitationVersion
@@ -23,6 +24,12 @@ const RSVP_AUTO_OPEN_DELAY_MS = 2000
 
 function App({ version }: AppProps) {
   const isV2 = version === 'v2'
+  const isV3 = version === 'v3'
+  const [isScheduleView, setIsScheduleView] = useState(
+    () =>
+      isV3 &&
+      new URLSearchParams(window.location.search).get('view') === 'schedule',
+  )
   const [isSplashVisible, setIsSplashVisible] = useState(true)
   const [hasOpenedInvitation, setHasOpenedInvitation] = useState(false)
   const [isMusicPlaying, setIsMusicPlaying] = useState(false)
@@ -36,6 +43,33 @@ function App({ version }: AppProps) {
   const handleWeddingInfoVisible = useCallback(() => {
     setHasSeenWeddingInfo(true)
   }, [])
+
+  const navigateToView = useCallback((view: 'invitation' | 'schedule') => {
+    const url = new URL(window.location.href)
+
+    if (view === 'schedule') {
+      url.searchParams.set('version', 'v3')
+      url.searchParams.set('view', 'schedule')
+      window.history.pushState(null, '', url)
+    } else {
+      url.searchParams.delete('view')
+      window.history.replaceState(null, '', url)
+    }
+
+    setIsScheduleView(view === 'schedule')
+    window.scrollTo({ top: 0, behavior: 'auto' })
+  }, [])
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search)
+      setIsScheduleView(isV3 && params.get('view') === 'schedule')
+      window.scrollTo({ top: 0, behavior: 'auto' })
+    }
+
+    window.addEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [isV3])
 
   useEffect(() => {
     if (
@@ -108,6 +142,10 @@ function App({ version }: AppProps) {
     musicRef.current.pause()
   }
 
+  if (isScheduleView) {
+    return <SchedulePage onBack={() => navigateToView('invitation')} />
+  }
+
   return (
     <>
       {isSplashVisible ? (
@@ -115,6 +153,7 @@ function App({ version }: AppProps) {
           assetLoadStatus={assetLoadStatus}
           onComplete={() => setIsSplashVisible(false)}
           onOpen={() => setHasOpenedInvitation(true)}
+          onOpenSchedule={isV3 ? () => navigateToView('schedule') : undefined}
           onRetry={retryAssetLoad}
         />
       ) : null}
@@ -140,6 +179,16 @@ function App({ version }: AppProps) {
           <MoneyGiftSection />
         </div>
         <ChapterNavigation showAttendance />
+        {isV3 ? (
+          <button
+            className="schedule-floating-button"
+            onClick={() => navigateToView('schedule')}
+            type="button"
+          >
+            <span aria-hidden="true">☷</span>
+            식순 확인
+          </button>
+        ) : null}
       </main>
       {/* biome-ignore lint/a11y/useMediaCaption: 배경음악은 청첩장 정보를 전달하지 않는 선택적 오디오입니다. */}
       <audio
