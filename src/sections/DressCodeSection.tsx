@@ -93,8 +93,8 @@ export function DressCodeSection() {
             ))}
           </div>
           <figcaption className="visually-hidden">
-            신랑 신부 곁으로 베이지와 브라운 계열의 옷을 입은 하객들이 두 명씩
-            모여 단체 사진을 완성합니다.
+            신랑 신부 곁으로 베이지, 주황, 브라운 계열의 옷을 입은 하객들이 두
+            명씩 모여 단체 사진을 완성합니다.
           </figcaption>
         </figure>
       </div>
@@ -104,6 +104,7 @@ export function DressCodeSection() {
         titleId="dress-code-title"
       />
       <div className="wedding-dress-code__palette" aria-hidden="true">
+        <span />
         <span />
         <span />
         <span />
