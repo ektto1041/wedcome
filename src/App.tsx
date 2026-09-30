@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import backgroundMusic from './assets/audio/L-O-V-E.mp3'
 import { ChapterNavigation } from './components/ChapterNavigation'
 import { ThemeSplash } from './components/ThemeSplash'
@@ -15,14 +15,24 @@ import { WeddingInfoSection } from './sections/WeddingInfoSection'
 export type InvitationVersion = 'default' | 'v2'
 
 type AppProps = {
+  isUploadTestMode: boolean
+  version: InvitationVersion
+}
+
+type InvitationAppProps = {
   version: InvitationVersion
 }
 
 const MUSIC_CONTROL_STICK_DISTANCE_PX = 40
 const RSVP_AUTO_OPEN_ENABLED = false
 const RSVP_AUTO_OPEN_DELAY_MS = 2000
+const UploadHeroTestPage = lazy(() =>
+  import('./sections/UploadHeroTestPage').then((module) => ({
+    default: module.UploadHeroTestPage,
+  })),
+)
 
-function App({ version }: AppProps) {
+function InvitationApp({ version }: InvitationAppProps) {
   const isV2 = version === 'v2'
   const isMainVersion = version === 'default'
   const [isScheduleView, setIsScheduleView] = useState(
@@ -222,6 +232,18 @@ function App({ version }: AppProps) {
       </button>
     </>
   )
+}
+
+function App({ isUploadTestMode, version }: AppProps) {
+  if (isUploadTestMode) {
+    return (
+      <Suspense fallback={null}>
+        <UploadHeroTestPage />
+      </Suspense>
+    )
+  }
+
+  return <InvitationApp version={version} />
 }
 
 export default App

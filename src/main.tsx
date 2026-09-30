@@ -16,11 +16,13 @@ if (!rootElement) {
 }
 
 const version = getInvitationVersion(window.location.search)
+const isUploadTestMode =
+  new URLSearchParams(window.location.search).get('t') === 'u'
 document.documentElement.dataset.invitationVersion = version
 
 createRoot(rootElement).render(
   <StrictMode>
-    <App version={version} />
+    <App isUploadTestMode={isUploadTestMode} version={version} />
   </StrictMode>,
 )
 

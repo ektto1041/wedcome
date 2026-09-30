@@ -1,0 +1,27 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /weddings/{weddingId}/guest-stories/{uploaderId}/media {
+      allow read: if true;
+
+      allow create, update: if
+        request.auth != null &&
+        request.auth.uid == uploaderId &&
+        (
+          (
+            request.resource.contentType in ['image/jpeg', 'image/webp'] &&
+            request.resource.size <= 5 * 1024 * 1024
+          ) ||
+          (
+            request.resource.contentType == 'video/mp4' &&
+            request.resource.size <= 20 * 1024 * 1024
+          )
+        );
+
+      allow delete: if
+        request.auth != null &&
+        request.auth.uid == uploaderId;
+    }
+  }
+}

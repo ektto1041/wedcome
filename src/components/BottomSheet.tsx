@@ -12,6 +12,7 @@ type BottomSheetProps = {
   className?: string
   contentClassName?: string
   eyebrow?: string
+  isDismissible?: boolean
   isOpen: boolean
   layerClassName?: string
   onClose: () => void
@@ -33,6 +34,7 @@ export function BottomSheet({
   className = '',
   contentClassName = '',
   eyebrow,
+  isDismissible = true,
   isOpen,
   layerClassName = '',
   onClose,
@@ -51,7 +53,7 @@ export function BottomSheet({
   }, [onClose])
 
   const handleClose = useCallback(() => {
-    if (isClosingRef.current) {
+    if (!isDismissible || isClosingRef.current) {
       return
     }
 
@@ -63,7 +65,7 @@ export function BottomSheet({
       isClosingRef.current = false
       closeTimerRef.current = null
     }, CLOSE_ANIMATION_MS)
-  }, [])
+  }, [isDismissible])
 
   useEffect(() => {
     if (!isOpen) {
@@ -150,6 +152,7 @@ export function BottomSheet({
         className="drawer-backdrop"
         type="button"
         aria-label={`${title} 닫기`}
+        disabled={!isDismissible}
         onClick={handleClose}
       />
       <aside
@@ -168,6 +171,7 @@ export function BottomSheet({
           </div>
           <button
             className="bottom-sheet__close"
+            disabled={!isDismissible}
             ref={closeButtonRef}
             type="button"
             aria-label={`${title} 닫기`}

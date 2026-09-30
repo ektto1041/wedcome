@@ -1,5 +1,6 @@
 import {
   type CSSProperties,
+  type ReactNode,
   type PointerEvent as ReactPointerEvent,
   useCallback,
   useEffect,
@@ -10,7 +11,7 @@ import {
 import brideProfileImage from '../assets/images/bride-profile.jpg'
 import groomProfileImage from '../assets/images/groom-profile.jpg'
 import heroImage from '../assets/images/hero-image.jpg'
-import { heroStories } from '../data/heroStories'
+import { type HeroStory, heroStories } from '../data/heroStories'
 import { invitation } from '../data/invitation'
 
 const TAP_MAX_DURATION_MS = 220
@@ -48,12 +49,33 @@ function getProgressStyle(progress: number): ProgressStyle {
 function HeroProgress({
   activeIndex,
   progress,
+  progressVariant,
   storyIds,
 }: {
   activeIndex: number
   progress: number
-  storyIds: string[]
+  progressVariant: 'segmented' | 'continuous'
+  storyIds: readonly string[]
 }) {
+  if (progressVariant === 'continuous') {
+    const totalProgress =
+      storyIds.length > 0 ? (activeIndex + progress) / storyIds.length : 0
+
+    return (
+      <div
+        className="hero-story__progress hero-story__progress--continuous"
+        aria-hidden="true"
+      >
+        <span className="hero-story__progress-track">
+          <span
+            className="hero-story__progress-fill"
+            style={getProgressStyle(totalProgress)}
+          />
+        </span>
+      </div>
+    )
+  }
+
   return (
     <div className="hero-story__progress" aria-hidden="true">
       {storyIds.map((storyId, index) => {
@@ -107,9 +129,23 @@ export function HeroImageSection() {
 
 type HeroSectionProps = {
   isPlaybackEnabled: boolean
+  mode?: 'default' | 'upload-test'
+  onAllStoriesFailed?: () => void
+  progressVariant?: 'segmented' | 'continuous'
+  showStoryPicker?: boolean
+  stories?: readonly HeroStory[]
+  topActions?: ReactNode
 }
 
-export function HeroSection({ isPlaybackEnabled }: HeroSectionProps) {
+export function HeroSection({
+  isPlaybackEnabled,
+  mode = 'default',
+  onAllStoriesFailed,
+  progressVariant = 'segmented',
+  showStoryPicker = true,
+  stories = heroStories,
+  topActions,
+}: HeroSectionProps) {
   const sectionRef = useRef<HTMLElement>(null)
   const scrollIndicatorRef = useRef<HTMLDivElement>(null)
   const videoRefs = useRef(new Map<string, HTMLVideoElement>())
@@ -139,8 +175,8 @@ export function HeroSection({ isPlaybackEnabled }: HeroSectionProps) {
   )
 
   const availableStories = useMemo(
-    () => heroStories.filter((story) => !failedStoryIds.has(story.id)),
-    [failedStoryIds],
+    () => stories.filter((story) => !failedStoryIds.has(story.id)),
+    [failedStoryIds, stories],
   )
   const activeStory =
     availableStories[activeIndex] ?? availableStories.at(0) ?? null
@@ -331,6 +367,12 @@ export function HeroSection({ isPlaybackEnabled }: HeroSectionProps) {
       setActiveIndex(0)
     }
   }, [activeIndex, availableStories.length])
+
+  useEffect(() => {
+    if (stories.length > 0 && availableStories.length === 0) {
+      onAllStoriesFailed?.()
+    }
+  }, [availableStories.length, onAllStoriesFailed, stories.length])
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -563,8 +605,7 @@ export function HeroSection({ isPlaybackEnabled }: HeroSectionProps) {
 
     if (isTap) {
       const bounds = event.currentTarget.getBoundingClientRect()
-      const isPreviousDirection =
-        event.clientX < bounds.left + bounds.width / 2
+      const isPreviousDirection = event.clientX < bounds.left + bounds.width / 2
 
       if (isPreviousDirection) {
         goToPreviousStory()
@@ -660,7 +701,12 @@ export function HeroSection({ isPlaybackEnabled }: HeroSectionProps) {
   }
 
   return (
-    <section id="home" className="hero-section" ref={sectionRef}>
+    <section
+      id="home"
+      className={`hero-section ${mode === 'upload-test' ? 'hero-section--upload-test' : ''}`}
+      data-hero-mode={mode}
+      ref={sectionRef}
+    >
       <img
         className="hero-section__image hero-story__fallback"
         src={heroImage}
@@ -734,9 +780,11 @@ export function HeroSection({ isPlaybackEnabled }: HeroSectionProps) {
           <HeroProgress
             activeIndex={activeIndex}
             progress={progress}
+            progressVariant={progressVariant}
             storyIds={availableStories.map((story) => story.id)}
           />
-          <StoryPicker index={activeIndex} />
+          {showStoryPicker ? <StoryPicker index={activeIndex} /> : null}
+          {topActions}
           <p className="hero-story__status" aria-live="polite">
             총 {availableStories.length}개 중 {activeIndex + 1}번째 스토리
           </p>
